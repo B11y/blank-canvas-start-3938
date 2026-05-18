@@ -11,7 +11,7 @@ export const projects: Project[] = [
     coverImage: 'https://images.unsplash.com/photo-1733496637708-9470e9c8cfe2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MDA2OTF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjI3Njk1NjB8&ixlib=rb-4.1.0&q=80&w=1080',
     description: 'An exploration of the stark beauty and quiet majesty of the American Southwest. This series captures the interplay of light, shadow, and ancient geological formations that define the desert landscape.',
     client: 'National Geographic',
-    tools: 'Adobe Illustrator & Photoshop',
+    camera: 'Adobe Illustrator & Photoshop',
     location: 'Arizona & Utah',
     images: [
       {
@@ -54,7 +54,7 @@ export const projects: Project[] = [
     coverImage: 'https://images.unsplash.com/photo-1761069234906-a7c77124f641?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MDA2OTF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjI3Njk1NjJ8&ixlib=rb-4.1.0&q=80&w=1080',
     description: 'A portrait series celebrating the diversity and character of city dwellers. Each subject was photographed in their favorite urban location, revealing the intimate connection between people and their environment.',
     client: 'The New York Times Magazine',
-    tools: 'Adobe Illustrator & Photoshop',
+    camera: 'Adobe Illustrator & Photoshop',
     location: 'New York City',
     images: [
       {
@@ -97,7 +97,7 @@ export const projects: Project[] = [
     coverImage: 'https://images.unsplash.com/photo-1758543437543-6d61ca0fd530?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MDA2OTF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjI3Njk1NjR8&ixlib=rb-4.1.0&q=80&w=1080',
     description: 'Modern architecture captured through a minimalist lens. This series focuses on geometric forms, materiality, and the interplay of structure with natural light.',
     client: 'Architectural Digest',
-    tools: 'Adobe Illustrator & Photoshop',
+    camera: 'Adobe Illustrator & Photoshop',
     location: 'International',
     images: [
       {
@@ -140,7 +140,7 @@ export const projects: Project[] = [
     coverImage: 'https://images.unsplash.com/photo-1682232568244-edbb92614c2a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MDA2OTF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjI3Njk1NjZ8&ixlib=rb-4.1.0&q=80&w=1080',
     description: 'An editorial series exploring contemporary fashion through bold compositions and dramatic lighting. Shot on location and in studio.',
     client: 'Vogue',
-    tools: 'Adobe Illustrator & Photoshop',
+    camera: 'Adobe Illustrator & Photoshop',
     location: 'New York & Paris',
     images: [
       {
@@ -183,7 +183,7 @@ export const projects: Project[] = [
     coverImage: 'https://images.unsplash.com/photo-1742260765447-239ed006350a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MDA2OTF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjI3Njk1Njh8&ixlib=rb-4.1.0&q=80&w=1080',
     description: 'Documentary series following mountain communities and their relationship with the changing alpine environment. A year-long project documenting life at altitude.',
     client: 'Personal Project',
-    tools: 'Adobe Illustrator & Photoshop',
+    camera: 'Adobe Illustrator & Photoshop',
     location: 'Swiss Alps',
     images: [
       {
@@ -226,7 +226,7 @@ export const projects: Project[] = [
     coverImage: 'https://images.unsplash.com/photo-1669908752972-e04c3b65e855?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MDA2OTF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjI3Njk1Njl8&ixlib=rb-4.1.0&q=80&w=1080',
     description: 'The ever-changing mood of the coastline captured through different seasons and weather conditions. A meditation on light, water, and time.',
     location: 'Pacific Northwest',
-    tools: 'Adobe Illustrator & Photoshop',
+    camera: 'Adobe Illustrator & Photoshop',
     images: [
       {
         id: '6-1',
@@ -268,7 +268,7 @@ export const projects: Project[] = [
     coverImage: 'https://images.unsplash.com/photo-1616267624976-b45d3a7bac73?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MDA2OTF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjI3Njk1NzF8&ixlib=rb-4.1.0&q=80&w=1080',
     description: 'Controlled studio portraiture emphasizing form, light, and expression. Classic approach to contemporary subjects.',
     client: 'Various Editorial',
-    tools: 'Adobe Illustrator & Photoshop',
+    camera: 'Adobe Illustrator & Photoshop',
     location: 'New York Studio',
     images: [
       {
@@ -311,7 +311,7 @@ export const projects: Project[] = [
     coverImage: 'https://images.unsplash.com/photo-1582210413269-f0bf6d13f58f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MDA2OTF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjI3Njk1NzN8&ixlib=rb-4.1.0&q=80&w=1080',
     description: 'Urban nightscapes and the electric energy of city life after dark. Long exposures and ambient light create a dreamlike quality.',
     client: 'Adobe Creative Cloud',
-    tools: 'Adobe Illustrator & Photoshop',
+    camera: 'Adobe Illustrator & Photoshop',
     location: 'Tokyo & New York',
     images: [
       {
