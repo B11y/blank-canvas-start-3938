@@ -116,6 +116,28 @@ export default function About() {
                     </svg>
                   </a>
                 )}
+                {photographerInfo.socialLinks.facebook && (
+                  <a
+                    href={photographerInfo.socialLinks.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-3 border border-border rounded-sm hover:bg-accent transition-colors"
+                    aria-label="Facebook"
+                  >
+                    <Facebook className="size-5" />
+                  </a>
+                )}
+                {photographerInfo.socialLinks.whatsapp && (
+                  <a
+                    href={photographerInfo.socialLinks.whatsapp}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-3 border border-border rounded-sm hover:bg-accent transition-colors"
+                    aria-label="WhatsApp"
+                  >
+                    <MessageCircle className="size-5" />
+                  </a>
+                )}
               </div>
             </motion.div>
 
