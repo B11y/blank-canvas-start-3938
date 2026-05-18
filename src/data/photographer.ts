@@ -2,35 +2,32 @@ import type { PhotographerInfo } from '@/types';
 
 export const photographerInfo: PhotographerInfo = {
   name: 'Ibrahim Mohamed',
-  tagline: 'Editorial & Commercial Photographer',
-  heroIntroduction: 'Creating visual narratives that capture authentic moments and timeless stories.',
-  biography: `Sarah Mitchell is an award-winning photographer specializing in editorial and commercial work, with recognition including the International Photography Awards Editorial Photographer of the Year 2023 and PDN Photo Annual Winner 2022. With over a decade of experience, her work has been featured in numerous international publications and exhibitions, collaborating with clients such as Vogue, The New York Times, National Geographic, Adobe, Apple, Nike, and Architectural Digest.
+  tagline: 'Where ink meets mind',
+  heroIntroduction: 'Crafting bold visual identities and design systems that turn ideas into unforgettable brands.',
+  biography: `Ibrahim Mohamed is a multidisciplinary graphic designer crafting brand identities, social media systems, print, packaging, and illustration with a strong focus on concept, type, and detail. His work blends thoughtful strategy with clean, intentional visuals — turning briefs into design languages that scale across every medium.
 
-Based in New York with an MFA in Photography from the School of Visual Arts, Sarah brings a unique perspective to every project, combining technical excellence with artistic vision. Her approach to photography is deeply rooted in storytelling, believing that every image should convey emotion and meaning beyond its visual appeal.`,
-  approach: `My photography is guided by three principles: authenticity, composition, and light. I believe the best images emerge when subjects feel comfortable and genuine, when composition guides the viewer's eye naturally, and when light reveals the essence of the moment.
+Over the years, Ibrahim has collaborated with startups, agencies, and personal brands to build cohesive visual systems that feel both timeless and contemporary. He believes great design starts with listening — to the brand, the audience, and the story waiting to be told.`,
+  approach: `My design process is built on three principles: clarity, craft, and curiosity. Clarity in communication, craft in every pixel and curve, and curiosity that keeps the work fresh and unexpected.
 
-Whether working on editorial assignments or commercial projects, I strive to create images that transcend their immediate purpose and become lasting visual statements.`,
+Whether it's a logo, a packaging system, or a social campaign, I aim to create work that doesn't just look good — it works hard and lasts long.`,
   awards: [
-    'International Photography Awards - Editorial Photographer of the Year 2023',
-    'PDN Photo Annual - Winner 2022',
-    'Hasselblad Masters Finalist 2021',
-    'Communication Arts Photography Annual 2020'
+    'Featured on Behance — Graphic Design Gallery',
+    'Selected Brand Identity Projects — 2023 / 2024',
+    'Multiple client commissions across MENA region'
   ],
   clients: [
-    'Vogue',
-    'The New York Times',
-    'National Geographic',
-    'Adobe',
-    'Apple',
-    'Nike',
-    'Patagonia',
-    'Architectural Digest'
+    'Independent Studios',
+    'Local Cafés & Restaurants',
+    'Personal Brands',
+    'Fashion & Lifestyle',
+    'Startups',
+    'Cultural Projects'
   ],
-  education: 'MFA Photography, School of Visual Arts, New York',
-  location: 'New York, NY',
+  education: 'Self-taught Graphic Designer, continuously learning through practice and the global design community',
+  location: 'Egypt',
   email: 'im60691@gmail.com',
   phone: '+20 100 013 5225',
-  availability: 'Currently booking for Q2 2025',
+  availability: 'Currently open for new projects and collaborations',
   socialLinks: {
     instagram: 'https://www.instagram.com/imde.signstudio/',
     linkedin: 'https://www.linkedin.com/in/ibrahim-mohamed-8a19981b1',
