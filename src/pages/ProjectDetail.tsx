@@ -110,8 +110,8 @@ export default function ProjectDetail() {
             {project.camera && (
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-sm font-light tracking-wide uppercase text-muted-foreground">
-                  <Camera className="size-4" />
-                  <span>Camera</span>
+                  <Wrench className="size-4" />
+                  <span>Tools</span>
                 </div>
                 <p className="font-light text-foreground">{project.camera}</p>
               </div>
