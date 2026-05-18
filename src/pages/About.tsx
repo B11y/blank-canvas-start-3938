@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Instagram, Linkedin } from 'lucide-react';
+import { Instagram, Linkedin, Facebook, MessageCircle } from 'lucide-react';
 import { photographerInfo } from '@/data/photographer';
 import { Separator } from '@/components/ui/separator';
 import { SEOHead } from '@/components/seo/SEOHead';
@@ -114,6 +114,28 @@ export default function About() {
                       <path d="M14 7h7" />
                       <path d="M17 8a3 3 0 1 1 0 6 3 3 0 0 1 0-6z" />
                     </svg>
+                  </a>
+                )}
+                {photographerInfo.socialLinks.facebook && (
+                  <a
+                    href={photographerInfo.socialLinks.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-3 border border-border rounded-sm hover:bg-accent transition-colors"
+                    aria-label="Facebook"
+                  >
+                    <Facebook className="size-5" />
+                  </a>
+                )}
+                {photographerInfo.socialLinks.whatsapp && (
+                  <a
+                    href={photographerInfo.socialLinks.whatsapp}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-3 border border-border rounded-sm hover:bg-accent transition-colors"
+                    aria-label="WhatsApp"
+                  >
+                    <MessageCircle className="size-5" />
                   </a>
                 )}
               </div>

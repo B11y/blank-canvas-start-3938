@@ -7,6 +7,7 @@ import { ThemeToggle } from './ThemeToggle';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { photographerInfo } from '@/data/photographer';
+import logo from '@/assets/logo.svg';
 import { cn } from '@/lib/utils';
 
 const navLinks = [
@@ -46,20 +47,20 @@ export function Header() {
           {/* Logo */}
           <Link
             to="/"
-            className={cn(
-              'text-lg font-light tracking-widest transition-all duration-300',
-              isTransparent
-                ? 'text-white hover:text-white/80'
-                : 'text-foreground hover:text-foreground/80'
-            )}
+            className="transition-opacity duration-300 hover:opacity-80"
+            aria-label={photographerInfo.name}
           >
-            <motion.span
+            <motion.img
+              src={logo}
+              alt={photographerInfo.name}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              {photographerInfo.name.toUpperCase()}
-            </motion.span>
+              className={cn(
+                'h-10 w-auto md:h-12 transition-all duration-300',
+                isTransparent && 'brightness-0 invert'
+              )}
+            />
           </Link>
 
           {/* Desktop Navigation */}
