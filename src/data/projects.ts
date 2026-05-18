@@ -4,7 +4,7 @@ export const projects: Project[] = [
   {
     id: '1',
     title: 'Desert Solitude',
-    category: 'landscapes',
+    category: 'branding',
     year: '2024',
     slug: 'desert-solitude',
     // Photo by Zain Creations on Unsplash
@@ -47,7 +47,7 @@ export const projects: Project[] = [
   {
     id: '2',
     title: 'Urban Portraits',
-    category: 'portraits',
+    category: 'social-media',
     year: '2024',
     slug: 'urban-portraits',
     // Photo by Bradley Andrews on Unsplash
@@ -90,7 +90,7 @@ export const projects: Project[] = [
   {
     id: '3',
     title: 'Architectural Visions',
-    category: 'architecture',
+    category: 'packaging',
     year: '2023',
     slug: 'architectural-visions',
     // Photo by E Vos on Unsplash
@@ -133,7 +133,7 @@ export const projects: Project[] = [
   {
     id: '4',
     title: 'Fashion Forward',
-    category: 'editorial',
+    category: 'print',
     year: '2023',
     slug: 'fashion-forward',
     // Photo by Yigit ARISOY on Unsplash
@@ -176,7 +176,7 @@ export const projects: Project[] = [
   {
     id: '5',
     title: 'Mountain Stories',
-    category: 'documentary',
+    category: 'illustration',
     year: '2023',
     slug: 'mountain-stories',
     // Photo by Eva Šumah on Unsplash
@@ -219,7 +219,7 @@ export const projects: Project[] = [
   {
     id: '6',
     title: 'Coastal Light',
-    category: 'landscapes',
+    category: 'branding',
     year: '2022',
     slug: 'coastal-light',
     // Photo by Max Kukurudziak on Unsplash
@@ -261,7 +261,7 @@ export const projects: Project[] = [
   {
     id: '7',
     title: 'Studio Sessions',
-    category: 'portraits',
+    category: 'social-media',
     year: '2022',
     slug: 'studio-sessions',
     // Photo by Kyle Loftus on Unsplash
@@ -304,7 +304,7 @@ export const projects: Project[] = [
   {
     id: '8',
     title: 'City Lights',
-    category: 'editorial',
+    category: 'print',
     year: '2022',
     slug: 'city-lights',
     // Photo by Michael Wu on Unsplash
