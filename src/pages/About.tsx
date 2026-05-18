@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Instagram, Linkedin } from 'lucide-react';
+import { Instagram, Linkedin, Facebook, MessageCircle } from 'lucide-react';
 import { photographerInfo } from '@/data/photographer';
 import { Separator } from '@/components/ui/separator';
 import { SEOHead } from '@/components/seo/SEOHead';
