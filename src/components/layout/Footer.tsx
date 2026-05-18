@@ -65,6 +65,28 @@ export function Footer() {
                 </svg>
               </a>
             )}
+            {photographerInfo.socialLinks.facebook && (
+              <a
+                href={photographerInfo.socialLinks.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="Facebook"
+              >
+                <Facebook className="size-5" />
+              </a>
+            )}
+            {photographerInfo.socialLinks.whatsapp && (
+              <a
+                href={photographerInfo.socialLinks.whatsapp}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="WhatsApp"
+              >
+                <MessageCircle className="size-5" />
+              </a>
+            )}
           </div>
         </div>
       </div>
