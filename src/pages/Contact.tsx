@@ -14,7 +14,7 @@ export default function Contact() {
     <>
       <SEOHead
         title="Contact"
-        description={`Get in touch with ${photographerInfo.name} for photography inquiries, collaborations, and project bookings. ${photographerInfo.availability}`}
+        description={`Get in touch with ${photographerInfo.name} for graphic design inquiries, brand identity projects, and creative collaborations. ${photographerInfo.availability}`}
       />
       
       <div className="min-h-screen">
