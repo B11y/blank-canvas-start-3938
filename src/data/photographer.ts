@@ -28,13 +28,15 @@ Whether working on editorial assignments or commercial projects, I strive to cre
   ],
   education: 'MFA Photography, School of Visual Arts, New York',
   location: 'New York, NY',
-  email: 'hello@sarahmitchell.com',
-  phone: '+1 (555) 123-4567',
+  email: 'im60691@gmail.com',
+  phone: '+20 100 013 5225',
   availability: 'Currently booking for Q2 2025',
   socialLinks: {
-    instagram: 'https://instagram.com/sarahmitchellphoto',
-    linkedin: 'https://linkedin.com/in/sarahmitchell',
-    behance: 'https://behance.net/sarahmitchell'
+    instagram: 'https://www.instagram.com/imde.signstudio/',
+    linkedin: 'https://www.linkedin.com/in/ibrahim-mohamed-8a19981b1',
+    behance: 'https://www.behance.net/ibrahimmohamed196',
+    facebook: 'https://www.facebook.com/share/1DYCNVSTDJ/',
+    whatsapp: 'https://wa.me/201000135225'
   },
   // Photo by Joshua Sun on Unsplash
   portraitImage: 'https://images.unsplash.com/photo-1585279968680-6606ee6ed134?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MDA2OTF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjI3Njk1NjB8&ixlib=rb-4.1.0&q=80&w=1080'
