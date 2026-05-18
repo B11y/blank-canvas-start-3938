@@ -7,6 +7,7 @@ import { ThemeToggle } from './ThemeToggle';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { photographerInfo } from '@/data/photographer';
+import logo from '@/assets/logo.svg';
 import { cn } from '@/lib/utils';
 
 const navLinks = [
