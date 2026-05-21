@@ -29,6 +29,21 @@ export interface Project {
   slug: string;
 }
 
+export interface ExperienceItem {
+  company: string;
+  role: string;
+  period: string;
+  location: string;
+  highlights: string[];
+}
+
+export interface EducationItem {
+  title: string;
+  institution: string;
+  period: string;
+  detail?: string;
+}
+
 export interface PhotographerInfo {
   name: string;
   tagline: string;
@@ -37,10 +52,16 @@ export interface PhotographerInfo {
   approach: string;
   awards: string[];
   clients: string[];
-  education: string;
+  education: EducationItem[];
+  experience: ExperienceItem[];
+  tools: string[];
+  skills: string[];
+  languages: string[];
   location: string;
+  address?: string;
   email: string;
   phone: string;
+  phoneSecondary?: string;
   availability: string;
   socialLinks: {
     instagram?: string;
@@ -51,6 +72,7 @@ export interface PhotographerInfo {
   };
   portraitImage: string;
 }
+
 
 export interface ContactSubmission {
   name: string;

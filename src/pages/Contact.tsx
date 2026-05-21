@@ -107,11 +107,19 @@ export default function Contact() {
                       Phone
                     </p>
                     <a
-                      href={`tel:${photographerInfo.phone}`}
-                      className="text-base md:text-lg font-light hover:text-muted-foreground transition-colors"
+                      href={`tel:${photographerInfo.phone.replace(/\s/g, '')}`}
+                      className="block text-base md:text-lg font-light hover:text-muted-foreground transition-colors"
                     >
                       {photographerInfo.phone}
                     </a>
+                    {photographerInfo.phoneSecondary && (
+                      <a
+                        href={`tel:${photographerInfo.phoneSecondary.replace(/\s/g, '')}`}
+                        className="block text-base md:text-lg font-light hover:text-muted-foreground transition-colors"
+                      >
+                        {photographerInfo.phoneSecondary}
+                      </a>
+                    )}
                   </div>
                 </div>
 
@@ -127,8 +135,14 @@ export default function Contact() {
                     <p className="text-base md:text-lg font-light">
                       {photographerInfo.location}
                     </p>
+                    {photographerInfo.address && (
+                      <p className="text-sm font-light text-muted-foreground">
+                        {photographerInfo.address}
+                      </p>
+                    )}
                   </div>
                 </div>
+
               </div>
             </motion.div>
           </div>

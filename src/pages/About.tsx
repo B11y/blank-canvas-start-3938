@@ -193,6 +193,135 @@ export default function About() {
           </div>
         </div>
       </section>
+
+      {/* Experience Section */}
+      <section className="py-16 md:py-24 px-6 lg:px-8 border-t border-border">
+        <div className="max-w-5xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0.8, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4 }}
+            className="space-y-12"
+          >
+            <div className="space-y-2">
+              <h2 className="text-3xl md:text-4xl font-light tracking-wide">Experience</h2>
+              <p className="text-muted-foreground font-light">Selected professional work</p>
+            </div>
+
+            <div className="space-y-10">
+              {photographerInfo.experience.map((item, i) => (
+                <div key={i} className="grid md:grid-cols-[200px_1fr] gap-6 md:gap-10">
+                  <div className="space-y-1">
+                    <p className="text-sm font-light tracking-wide text-muted-foreground">{item.period}</p>
+                    <p className="text-sm font-light tracking-wide text-muted-foreground">{item.location}</p>
+                  </div>
+                  <div className="space-y-3">
+                    <div>
+                      <h3 className="text-xl md:text-2xl font-light">{item.company}</h3>
+                      <p className="text-base text-muted-foreground font-light">{item.role}</p>
+                    </div>
+                    <ul className="space-y-2 pt-2">
+                      {item.highlights.map((h, j) => (
+                        <li key={j} className="text-sm md:text-base font-light leading-relaxed text-muted-foreground flex gap-3">
+                          <span className="text-foreground/40 mt-2 size-1 rounded-full bg-current shrink-0" />
+                          <span>{h}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Skills & Tools Section */}
+      <section className="py-16 md:py-24 px-6 lg:px-8 border-t border-border">
+        <div className="max-w-5xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0.8, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4 }}
+            className="grid md:grid-cols-2 gap-12 lg:gap-16"
+          >
+            <div className="space-y-6">
+              <h2 className="text-3xl md:text-4xl font-light tracking-wide">Tools</h2>
+              <div className="flex flex-wrap gap-2">
+                {photographerInfo.tools.map((tool) => (
+                  <span
+                    key={tool}
+                    className="px-4 py-2 border border-border rounded-sm text-sm font-light tracking-wide"
+                  >
+                    {tool}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <h2 className="text-3xl md:text-4xl font-light tracking-wide">Skills</h2>
+              <div className="flex flex-wrap gap-2">
+                {photographerInfo.skills.map((skill) => (
+                  <span
+                    key={skill}
+                    className="px-4 py-2 border border-border rounded-sm text-sm font-light tracking-wide"
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Education & Languages Section */}
+      <section className="py-16 md:py-24 px-6 lg:px-8 border-t border-border">
+        <div className="max-w-5xl mx-auto grid md:grid-cols-[2fr_1fr] gap-12 lg:gap-16">
+          <motion.div
+            initial={{ opacity: 0.8, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4 }}
+            className="space-y-8"
+          >
+            <h2 className="text-3xl md:text-4xl font-light tracking-wide">Education</h2>
+            <div className="space-y-8">
+              {photographerInfo.education.map((edu, i) => (
+                <div key={i} className="space-y-1">
+                  <p className="text-sm font-light tracking-wide text-muted-foreground">{edu.period}</p>
+                  <h3 className="text-lg md:text-xl font-light">{edu.title}</h3>
+                  <p className="text-sm md:text-base text-muted-foreground font-light">{edu.institution}</p>
+                  {edu.detail && (
+                    <p className="text-sm font-light leading-relaxed text-muted-foreground pt-1">{edu.detail}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0.8, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.1 }}
+            className="space-y-6"
+          >
+            <h2 className="text-3xl md:text-4xl font-light tracking-wide">Languages</h2>
+            <ul className="space-y-2">
+              {photographerInfo.languages.map((lang) => (
+                <li key={lang} className="text-base font-light text-muted-foreground">
+                  {lang}
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        </div>
+      </section>
+
       </div>
     </>
   );

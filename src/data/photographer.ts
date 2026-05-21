@@ -23,10 +23,57 @@ Whether it's a logo, a packaging system, or a social campaign, I aim to create w
     'Startups',
     'Cultural Projects'
   ],
-  education: 'Self-taught Graphic Designer, continuously learning through practice and the global design community',
-  location: 'Egypt',
+  education: [
+    {
+      title: 'Bachelor of Laws (LL.B.)',
+      institution: 'Helwan University',
+      period: '2019 – 2023',
+      detail: 'Grade: Good'
+    },
+    {
+      title: 'Graphic Design Diploma',
+      institution: 'Russian Cultural Center (RCC)',
+      period: '2024',
+      detail: 'Intensive training in Adobe Photoshop, Illustrator, and InDesign, with a focus on visual branding and layout design.'
+    },
+    {
+      title: 'Color Theory, Design Composition & Visual Identity Design',
+      institution: 'Yanfaa Platform',
+      period: 'Online',
+      detail: 'Color harmony, composition principles, and complete visual identity systems including logos, palettes, typography, and brand guidelines.'
+    }
+  ],
+  experience: [
+    {
+      company: 'Manageex',
+      role: 'Graphic Designer',
+      period: '05/2024 – 12/2024',
+      location: 'Cairo, Fifth Settlement',
+      highlights: [
+        'Designed and produced promotional materials (social media posts, flyers, logos) that reflect the company identity and engage the target audience.',
+        'Collaborated closely with marketing and sales teams to translate plans and ideas into visual designs that boost audience engagement.',
+        'Used Adobe tools (Photoshop, Illustrator, InDesign) to deliver high-quality designs on tight project deadlines.'
+      ]
+    }
+  ],
+  tools: ['Adobe Photoshop', 'Adobe Illustrator', 'Adobe InDesign', 'AI Tools'],
+  skills: [
+    'Brand Identity Design',
+    'Logo Design',
+    'Social Media Design',
+    'Typography',
+    'Visual Storytelling',
+    'Color Theory',
+    'Design Composition',
+    'Layout Design'
+  ],
+  languages: ['Arabic — Native', 'English — Proficient'],
+  location: 'Cairo, Egypt',
+  address: '1 Lotfy Thabet Street, Cairo, Egypt — 11746',
   email: 'im60691@gmail.com',
   phone: '+20 100 013 5225',
+  phoneSecondary: '+20 110 415 3622',
+
   availability: 'Currently open for new projects and collaborations',
   socialLinks: {
     instagram: 'https://www.instagram.com/imde.signstudio/',
