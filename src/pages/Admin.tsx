@@ -1,13 +1,12 @@
 import { useEffect, useState, FormEvent } from 'react';
-import { Navigate } from 'react-router-dom';
-import { supabase, type SupabaseProject } from '@/lib/supabase';
+import { supabase, type SupabaseProject, type SupabaseProjectImage } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { SEOHead } from '@/components/seo/SEOHead';
 import { toast } from 'sonner';
-import { Pencil, Trash2, LogOut, Plus } from 'lucide-react';
+import { Pencil, Trash2, LogOut, Plus, X, ImagePlus, ArrowUp, ArrowDown } from 'lucide-react';
 
 const ADMIN_PASSWORD = 'IM2024admin';
 const AUTH_KEY = 'admin_authed';
@@ -70,6 +69,12 @@ export default function Admin() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  // Images for the project currently being edited
+  const [images, setImages] = useState<SupabaseProjectImage[]>([]);
+  const [newImageUrl, setNewImageUrl] = useState('');
+  // Local image URLs for a new (not-yet-created) project
+  const [pendingImages, setPendingImages] = useState<string[]>([]);
+
   const load = async () => {
     const { data, error } = await supabase
       .from('projects')
@@ -77,6 +82,16 @@ export default function Admin() {
       .order('date', { ascending: false });
     if (error) toast.error(error.message);
     else setProjects(data ?? []);
+  };
+
+  const loadImages = async (projectId: string) => {
+    const { data, error } = await supabase
+      .from('project_images')
+      .select('*')
+      .eq('project_id', projectId)
+      .order('sort_order', { ascending: true });
+    if (error) toast.error(error.message);
+    else setImages(data ?? []);
   };
 
   useEffect(() => {
@@ -88,6 +103,9 @@ export default function Admin() {
   const reset = () => {
     setForm(emptyForm);
     setEditingId(null);
+    setImages([]);
+    setPendingImages([]);
+    setNewImageUrl('');
   };
 
   const submit = async (e: FormEvent) => {
@@ -102,9 +120,20 @@ export default function Admin() {
         load();
       }
     } else {
-      const { error } = await supabase.from('projects').insert(form);
-      if (error) toast.error(error.message);
-      else {
+      const { data, error } = await supabase.from('projects').insert(form).select().single();
+      if (error) {
+        toast.error(error.message);
+      } else {
+        // Insert any pending images
+        if (data && pendingImages.length) {
+          const rows = pendingImages.map((url, i) => ({
+            project_id: data.id,
+            image_url: url,
+            sort_order: i,
+          }));
+          const { error: imgErr } = await supabase.from('project_images').insert(rows);
+          if (imgErr) toast.error('Project added, but images failed: ' + imgErr.message);
+        }
         toast.success('Project added');
         reset();
         load();
@@ -113,7 +142,7 @@ export default function Admin() {
     setLoading(false);
   };
 
-  const edit = (p: SupabaseProject) => {
+  const edit = async (p: SupabaseProject) => {
     setEditingId(p.id);
     setForm({
       title: p.title ?? '',
@@ -122,17 +151,61 @@ export default function Admin() {
       category: p.category ?? '',
       date: p.date ?? '',
     });
+    setPendingImages([]);
+    await loadImages(p.id);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const remove = async (id: string) => {
-    if (!confirm('Delete this project?')) return;
+    if (!confirm('Delete this project? Its images will be removed too.')) return;
+    // Delete images first (in case no cascade)
+    await supabase.from('project_images').delete().eq('project_id', id);
     const { error } = await supabase.from('projects').delete().eq('id', id);
     if (error) toast.error(error.message);
     else {
       toast.success('Project deleted');
       load();
     }
+  };
+
+  const addImage = async () => {
+    const url = newImageUrl.trim();
+    if (!url) return;
+    if (editingId) {
+      const nextOrder = images.length;
+      const { error } = await supabase
+        .from('project_images')
+        .insert({ project_id: editingId, image_url: url, sort_order: nextOrder });
+      if (error) return toast.error(error.message);
+      setNewImageUrl('');
+      loadImages(editingId);
+    } else {
+      setPendingImages([...pendingImages, url]);
+      setNewImageUrl('');
+    }
+  };
+
+  const removeImage = async (img: SupabaseProjectImage) => {
+    const { error } = await supabase.from('project_images').delete().eq('id', img.id);
+    if (error) return toast.error(error.message);
+    if (editingId) loadImages(editingId);
+  };
+
+  const removePendingImage = (idx: number) => {
+    setPendingImages(pendingImages.filter((_, i) => i !== idx));
+  };
+
+  const moveImage = async (img: SupabaseProjectImage, dir: -1 | 1) => {
+    const sorted = [...images];
+    const idx = sorted.findIndex((i) => i.id === img.id);
+    const target = idx + dir;
+    if (target < 0 || target >= sorted.length) return;
+    const other = sorted[target];
+    await Promise.all([
+      supabase.from('project_images').update({ sort_order: other.sort_order }).eq('id', img.id),
+      supabase.from('project_images').update({ sort_order: img.sort_order }).eq('id', other.id),
+    ]);
+    if (editingId) loadImages(editingId);
   };
 
   const logout = () => {
@@ -165,7 +238,7 @@ export default function Admin() {
               <Input id="category" required value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} placeholder="branding, social-media, …" />
             </div>
             <div className="space-y-2 md:col-span-2">
-              <Label htmlFor="image_url">Image URL</Label>
+              <Label htmlFor="image_url">Cover image URL (used as thumbnail)</Label>
               <Input id="image_url" type="url" value={form.image_url} onChange={(e) => setForm({ ...form, image_url: e.target.value })} placeholder="https://…" />
             </div>
             <div className="space-y-2">
@@ -177,6 +250,73 @@ export default function Admin() {
               <Textarea id="description" rows={4} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
             </div>
           </div>
+
+          {/* Gallery images manager */}
+          <div className="space-y-3 pt-2 border-t border-border">
+            <Label className="flex items-center gap-2">
+              <ImagePlus className="w-4 h-4" /> Gallery images
+            </Label>
+            <div className="flex gap-2">
+              <Input
+                type="url"
+                placeholder="https://image-url.jpg"
+                value={newImageUrl}
+                onChange={(e) => setNewImageUrl(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addImage();
+                  }
+                }}
+              />
+              <Button type="button" onClick={addImage} variant="outline">Add</Button>
+            </div>
+
+            {/* Existing images (when editing) */}
+            {editingId && images.length > 0 && (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                {images.map((img, i) => (
+                  <div key={img.id} className="relative group border border-border rounded overflow-hidden bg-muted">
+                    <img src={img.image_url} alt="" className="w-full h-28 object-cover" />
+                    <div className="absolute top-1 right-1 flex gap-1 opacity-0 group-hover:opacity-100 transition">
+                      <button type="button" onClick={() => moveImage(img, -1)} disabled={i === 0}
+                        className="bg-black/60 text-white rounded p-1 disabled:opacity-30">
+                        <ArrowUp className="w-3 h-3" />
+                      </button>
+                      <button type="button" onClick={() => moveImage(img, 1)} disabled={i === images.length - 1}
+                        className="bg-black/60 text-white rounded p-1 disabled:opacity-30">
+                        <ArrowDown className="w-3 h-3" />
+                      </button>
+                      <button type="button" onClick={() => removeImage(img)}
+                        className="bg-black/60 text-white rounded p-1">
+                        <X className="w-3 h-3" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Pending images (new project) */}
+            {!editingId && pendingImages.length > 0 && (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                {pendingImages.map((url, i) => (
+                  <div key={i} className="relative group border border-border rounded overflow-hidden bg-muted">
+                    <img src={url} alt="" className="w-full h-28 object-cover" />
+                    <button type="button" onClick={() => removePendingImage(i)}
+                      className="absolute top-1 right-1 bg-black/60 text-white rounded p-1 opacity-0 group-hover:opacity-100 transition">
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {editingId && images.length === 0 && (
+              <p className="text-xs text-muted-foreground">No gallery images yet. Add some above.</p>
+            )}
+          </div>
+
           <div className="flex gap-3">
             <Button type="submit" disabled={loading}>
               {loading ? 'Saving…' : editingId ? 'Update project' : 'Add project'}
