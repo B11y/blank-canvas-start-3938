@@ -14,6 +14,7 @@ import { lazy, Suspense } from "react";
 
 // Code-split route components for better performance
 const Index = lazy(() => import("./pages/Index"));
+const Admin = lazy(() => import("./pages/Admin"));
 const Portfolio = lazy(() => import("./pages/Portfolio"));
 const ProjectDetail = lazy(() => import("./pages/ProjectDetail"));
 const About = lazy(() => import("./pages/About"));
@@ -65,6 +66,14 @@ function AnimatedRoutes() {
           element={
             <PageTransition>
               <Contact />
+            </PageTransition>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <PageTransition>
+              <Admin />
             </PageTransition>
           }
         />
