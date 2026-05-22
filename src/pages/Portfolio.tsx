@@ -1,5 +1,6 @@
 import { projects } from '@/data/projects';
 import { PortfolioGrid } from '@/components/portfolio/PortfolioGrid';
+import { SupabaseProjectsSection } from '@/components/portfolio/SupabaseProjectsSection';
 import { SEOHead } from '@/components/seo/SEOHead';
 import { motion } from 'framer-motion';
 
@@ -38,6 +39,15 @@ export default function Portfolio() {
       {/* Portfolio Grid - Edge to edge */}
       <section className="py-12 md:py-16 px-2 md:px-4">
         <PortfolioGrid projects={projects} />
+      </section>
+
+      {/* Live projects from Supabase */}
+      <section className="py-12 md:py-16 border-t border-border">
+        <div className="max-w-7xl mx-auto px-6 mb-10 text-center">
+          <h2 className="text-3xl md:text-4xl font-light tracking-wide">Latest Work</h2>
+          <p className="text-muted-foreground mt-2">Fresh projects, updated regularly.</p>
+        </div>
+        <SupabaseProjectsSection />
       </section>
 
         {/* Bottom spacing */}
