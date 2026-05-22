@@ -14,3 +14,11 @@ export interface SupabaseProject {
   date: string;
   created_at?: string;
 }
+
+export interface SupabaseProjectImage {
+  id: string;
+  project_id: string;
+  image_url: string;
+  sort_order: number;
+  created_at?: string;
+}
