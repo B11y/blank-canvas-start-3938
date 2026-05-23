@@ -17,6 +17,7 @@ const Index = lazy(() => import("./pages/Index"));
 const Admin = lazy(() => import("./pages/Admin"));
 const Portfolio = lazy(() => import("./pages/Portfolio"));
 const ProjectDetail = lazy(() => import("./pages/ProjectDetail"));
+const SupabaseProjectDetail = lazy(() => import("./pages/SupabaseProjectDetail"));
 const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -50,6 +51,14 @@ function AnimatedRoutes() {
           element={
             <PageTransition>
               <ProjectDetail />
+            </PageTransition>
+          }
+        />
+        <Route
+          path="/projects/:id"
+          element={
+            <PageTransition>
+              <SupabaseProjectDetail />
             </PageTransition>
           }
         />

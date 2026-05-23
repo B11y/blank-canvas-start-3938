@@ -12,6 +12,8 @@ export interface SupabaseProject {
   image_url: string;
   category: string;
   date: string;
+  client?: string | null;
+  tools?: string | null;
   created_at?: string;
 }
 
