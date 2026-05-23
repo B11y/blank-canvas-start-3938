@@ -17,6 +17,8 @@ type FormState = {
   image_url: string;
   category: string;
   date: string;
+  client: string;
+  tools: string;
 };
 
 const emptyForm: FormState = {
@@ -25,6 +27,8 @@ const emptyForm: FormState = {
   image_url: '',
   category: '',
   date: new Date().toISOString().slice(0, 10),
+  client: '',
+  tools: '',
 };
 
 function LoginGate({ onAuth }: { onAuth: () => void }) {
@@ -150,6 +154,8 @@ export default function Admin() {
       image_url: p.image_url ?? '',
       category: p.category ?? '',
       date: p.date ?? '',
+      client: p.client ?? '',
+      tools: p.tools ?? '',
     });
     setPendingImages([]);
     await loadImages(p.id);
