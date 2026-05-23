@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { supabase, type SupabaseProject } from '@/lib/supabase';
-import { ProjectGalleryDialog } from './ProjectGalleryDialog';
 
 export function SupabaseProjectsSection() {
   const [projects, setProjects] = useState<SupabaseProject[]>([]);
   const [thumbs, setThumbs] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selected, setSelected] = useState<SupabaseProject | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -51,19 +50,18 @@ export function SupabaseProjectsSection() {
   }
 
   return (
-    <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto px-6">
-        {projects.map((project, i) => {
-          const thumb = thumbs[project.id] || project.image_url;
-          return (
-            <motion.article
-              key={project.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: i * 0.05 }}
-              onClick={() => setSelected(project)}
-              className="group overflow-hidden rounded-lg border border-border bg-card cursor-pointer"
-            >
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto px-6">
+      {projects.map((project, i) => {
+        const thumb = thumbs[project.id] || project.image_url;
+        return (
+          <motion.article
+            key={project.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: i * 0.05 }}
+            className="group overflow-hidden rounded-lg border border-border bg-card"
+          >
+            <Link to={`/projects/${project.id}`} className="block">
               {thumb && (
                 <div className="aspect-[4/3] overflow-hidden bg-muted">
                   <img
@@ -82,15 +80,10 @@ export function SupabaseProjectsSection() {
                 <h3 className="text-xl font-medium">{project.title}</h3>
                 <p className="text-sm text-muted-foreground line-clamp-3">{project.description}</p>
               </div>
-            </motion.article>
-          );
-        })}
-      </div>
-      <ProjectGalleryDialog
-        project={selected}
-        open={!!selected}
-        onClose={() => setSelected(null)}
-      />
-    </>
+            </Link>
+          </motion.article>
+        );
+      })}
+    </div>
   );
 }

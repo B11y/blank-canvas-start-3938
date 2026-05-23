@@ -17,6 +17,8 @@ type FormState = {
   image_url: string;
   category: string;
   date: string;
+  client: string;
+  tools: string;
 };
 
 const emptyForm: FormState = {
@@ -25,6 +27,8 @@ const emptyForm: FormState = {
   image_url: '',
   category: '',
   date: new Date().toISOString().slice(0, 10),
+  client: '',
+  tools: '',
 };
 
 function LoginGate({ onAuth }: { onAuth: () => void }) {
@@ -150,6 +154,8 @@ export default function Admin() {
       image_url: p.image_url ?? '',
       category: p.category ?? '',
       date: p.date ?? '',
+      client: p.client ?? '',
+      tools: p.tools ?? '',
     });
     setPendingImages([]);
     await loadImages(p.id);
@@ -244,6 +250,14 @@ export default function Admin() {
             <div className="space-y-2">
               <Label htmlFor="date">Date</Label>
               <Input id="date" type="date" required value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="client">Client</Label>
+              <Input id="client" value={form.client} onChange={(e) => setForm({ ...form, client: e.target.value })} placeholder="e.g. Nike" />
+            </div>
+            <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="tools">Tools / Software</Label>
+              <Input id="tools" value={form.tools} onChange={(e) => setForm({ ...form, tools: e.target.value })} placeholder="Illustrator, Photoshop" />
             </div>
             <div className="space-y-2 md:col-span-2">
               <Label htmlFor="description">Description</Label>
