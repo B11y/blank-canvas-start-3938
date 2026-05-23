@@ -251,6 +251,14 @@ export default function Admin() {
               <Label htmlFor="date">Date</Label>
               <Input id="date" type="date" required value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} />
             </div>
+            <div className="space-y-2">
+              <Label htmlFor="client">Client</Label>
+              <Input id="client" value={form.client} onChange={(e) => setForm({ ...form, client: e.target.value })} placeholder="e.g. Nike" />
+            </div>
+            <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="tools">Tools / Software</Label>
+              <Input id="tools" value={form.tools} onChange={(e) => setForm({ ...form, tools: e.target.value })} placeholder="Illustrator, Photoshop" />
+            </div>
             <div className="space-y-2 md:col-span-2">
               <Label htmlFor="description">Description</Label>
               <Textarea id="description" rows={4} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
