@@ -14,16 +14,8 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 
-// Validation schema with security best practices
 const contactFormSchema = z.object({
   name: z
     .string()
@@ -35,22 +27,15 @@ const contactFormSchema = z.object({
     .trim()
     .email({ message: 'Please enter a valid email address' })
     .max(255, { message: 'Email must be less than 255 characters' }),
-  projectType: z.enum(['editorial', 'commercial', 'personal'], {
-    required_error: 'Please select a project type',
-  }),
   message: z
     .string()
     .trim()
-    .min(10, { message: 'Message must be at least 10 characters' })
-    .max(1000, { message: 'Message must be less than 1000 characters' }),
+    .max(1000, { message: 'Message must be less than 1000 characters' })
+    .optional(),
 });
 
 type ContactFormValues = z.infer<typeof contactFormSchema>;
 
-/**
- * Contact form component with validation and error handling
- * Uses react-hook-form + zod for type-safe validation
- */
 export function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -60,42 +45,29 @@ export function ContactForm() {
     defaultValues: {
       name: '',
       email: '',
-      projectType: undefined,
       message: '',
     },
   });
 
   const onSubmit = async (data: ContactFormValues) => {
     setIsSubmitting(true);
-    
     try {
-      // Formspree integration - replace YOUR_FORM_ID with your actual form ID
       const response = await fetch('https://formspree.io/f/YOUR_FORM_ID', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: data.name,
           email: data.email,
-          projectType: data.projectType,
           message: data.message,
-          _subject: `New ${data.projectType} inquiry from ${data.name}`,
+          _subject: `New inquiry from ${data.name}`,
         }),
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to send message');
-      }
+      if (!response.ok) throw new Error('Failed to send message');
 
-      // Show success state
       setIsSuccess(true);
       form.reset();
-
-      // Reset success message after 5 seconds
-      setTimeout(() => {
-        setIsSuccess(false);
-      }, 5000);
+      setTimeout(() => setIsSuccess(false), 5000);
     } catch (error) {
       form.setError('root', {
         message: 'Failed to send message. Please try again.',
@@ -105,7 +77,6 @@ export function ContactForm() {
     }
   };
 
-  // Show success message
   if (isSuccess) {
     return (
       <motion.div
@@ -132,14 +103,15 @@ export function ContactForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        {/* Name Field */}
+
+        {/* Name - Required */}
         <FormField
           control={form.control}
           name="name"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-sm font-light tracking-wide">
-                Name
+                Name <span className="text-destructive">*</span>
               </FormLabel>
               <FormControl>
                 <Input
@@ -153,14 +125,14 @@ export function ContactForm() {
           )}
         />
 
-        {/* Email Field */}
+        {/* Email - Required */}
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-sm font-light tracking-wide">
-                Email
+                Email <span className="text-destructive">*</span>
               </FormLabel>
               <FormControl>
                 <Input
@@ -175,46 +147,14 @@ export function ContactForm() {
           )}
         />
 
-        {/* Project Type Select */}
-        <FormField
-          control={form.control}
-          name="projectType"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-sm font-light tracking-wide">
-                Project Type
-              </FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger className="font-light">
-                    <SelectValue placeholder="Select project type" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent className="bg-popover z-50">
-                  <SelectItem value="editorial" className="font-light">
-                    Editorial
-                  </SelectItem>
-                  <SelectItem value="commercial" className="font-light">
-                    Commercial
-                  </SelectItem>
-                  <SelectItem value="personal" className="font-light">
-                    Personal
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage className="text-xs font-light" />
-            </FormItem>
-          )}
-        />
-
-        {/* Message Textarea */}
+        {/* Message - Optional */}
         <FormField
           control={form.control}
           name="message"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-sm font-light tracking-wide">
-                Message
+                Message <span className="text-muted-foreground text-xs">(optional)</span>
               </FormLabel>
               <FormControl>
                 <Textarea
@@ -228,14 +168,12 @@ export function ContactForm() {
           )}
         />
 
-        {/* Root Error Message */}
         {form.formState.errors.root && (
           <div className="text-sm text-destructive font-light">
             {form.formState.errors.root.message}
           </div>
         )}
 
-        {/* Submit Button */}
         <Button
           type="submit"
           className="w-full py-6 text-base font-light tracking-wide"
