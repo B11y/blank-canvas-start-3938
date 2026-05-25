@@ -5,7 +5,7 @@ interface ThemeProviderProps {
   children: ReactNode;
   attribute?: string;
   defaultTheme?: string;
-  enableSystem?: boolean;
+  enableSystem={false}?: boolean;
   disableTransitionOnChange?: boolean;
 }
 
@@ -17,8 +17,8 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   return (
     <NextThemesProvider
       attribute="class"
-      defaultTheme="system"
-      enableSystem
+      defaultTheme="dark"
+      enableSystem={false}
       disableTransitionOnChange
       {...props}
     >
