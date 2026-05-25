@@ -5,7 +5,7 @@ interface ThemeProviderProps {
   children: ReactNode;
   attribute?: string;
   defaultTheme?: string;
-  enableSystem={false}?: boolean;
+  enableSystem?: boolean;
   disableTransitionOnChange?: boolean;
 }
 
