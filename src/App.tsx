@@ -99,7 +99,11 @@ function AnimatedRoutes() {
   );
 }
 
-const App = () => (
+const App = () => {
+  if (typeof document !== "undefined") {
+    document.documentElement.classList.add("dark");
+  }
+  return (
   <ErrorBoundary>
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
