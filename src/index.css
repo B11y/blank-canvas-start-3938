@@ -35,6 +35,12 @@ All colors MUST be HSL.
   --sidebar-border: hsl(220 13% 91%);
   --sidebar-ring: hsl(217.2 91.2% 59.8%);
 
+  /* IM Design Studio Brand Colors */
+  --gold: hsl(28 60% 57%);
+  --gold-light: hsl(38 90% 83%);
+  --gold-dark: hsl(24 50% 45%);
+  --navy: hsl(222 58% 27%);
+
   /* Shugar Design System Variables */
   --context-card-border: hsla(0, 0%, 92%, 1);
   --ds-red-800: oklch(58.19% 0.2482 25.15);
@@ -84,6 +90,12 @@ All colors MUST be HSL.
   --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
   --sidebar-border: hsl(240 3.7% 15.9%);
   --sidebar-ring: hsl(217.2 91.2% 59.8%);
+
+  /* IM Design Studio Brand Colors */
+  --gold: hsl(28 60% 57%);
+  --gold-light: hsl(38 90% 83%);
+  --gold-dark: hsl(24 50% 45%);
+  --navy: hsl(222 58% 27%);
 
   /* Shugar Design System Variables - Dark Mode */
   --context-card-border: hsla(0, 0%, 18%, 1);
