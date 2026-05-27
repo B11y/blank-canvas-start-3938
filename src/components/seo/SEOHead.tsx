@@ -18,7 +18,7 @@ export function SEOHead({
   const location = useLocation();
   
   const fullTitle = title 
-    ? `${title} | IM Design Studio` 
+    ? `IM Design Studio` 
     : 'IM Design Studio';
   
   const defaultDescription = photographerInfo.heroIntroduction;
