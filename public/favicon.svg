@@ -1,16 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" width="64" height="64">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="200 280 680 560">
   <defs>
-    <style>
-      .cls-1 {
-        fill: url(#linear-gradient);
-      }
-    </style>
-    <linearGradient id="linear-gradient" x1="748.77" y1="329.23" x2="324.1" y2="757.97" gradientUnits="userSpaceOnUse">
+    <linearGradient id="g" x1="748.77" y1="329.23" x2="324.1" y2="757.97" gradientUnits="userSpaceOnUse">
       <stop offset=".41" stop-color="#213a70"/>
-      <stop offset=".62" stop-color="#203668"/>
-      <stop offset=".95" stop-color="#1e2c52"/>
       <stop offset="1" stop-color="#1e2b4f"/>
     </linearGradient>
   </defs>
-  <path class="cls-1" d="M749.2,332.21v415.59h-76.43V465.3l-132.77,170.93-103.89-137.15v-121.85l103.89,142.69,132.77-187.72h76.43Zm-418.39,415.59h76.43V332.21h-76.43v415.59Z"/>
+  <rect x="200" y="280" width="680" height="560" fill="#D68A4E" rx="60"/>
+  <path fill="#ffffff" d="M749.2,332.21v415.59h-76.43V465.3l-132.77,170.93-103.89-137.15v-121.85l103.89,142.69,132.77-187.72h76.43Zm-418.39,415.59h76.43V332.21h-76.43v415.59Z"/>
 </svg>
