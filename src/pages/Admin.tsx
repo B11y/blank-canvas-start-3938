@@ -6,7 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { SEOHead } from '@/components/seo/SEOHead';
 import { toast } from 'sonner';
-import { Pencil, Trash2, LogOut, Plus, X, ImagePlus, ArrowUp, ArrowDown } from 'lucide-react';
+import { Pencil, Trash2, LogOut, Plus, X, ImagePlus, ArrowUp, ArrowDown, Star } from 'lucide-react';
 
 const ADMIN_PASSWORD = 'IM2024admin';
 const AUTH_KEY = 'admin_authed';
@@ -19,6 +19,7 @@ type FormState = {
   date: string;
   client: string;
   tools: string;
+  featured: boolean;
 };
 
 const emptyForm: FormState = {
@@ -29,6 +30,7 @@ const emptyForm: FormState = {
   date: new Date().toISOString().slice(0, 10),
   client: '',
   tools: '',
+  featured: false,
 };
 
 function LoginGate({ onAuth }: { onAuth: () => void }) {
@@ -73,10 +75,8 @@ export default function Admin() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // Images for the project currently being edited
   const [images, setImages] = useState<SupabaseProjectImage[]>([]);
   const [newImageUrl, setNewImageUrl] = useState('');
-  // Local image URLs for a new (not-yet-created) project
   const [pendingImages, setPendingImages] = useState<string[]>([]);
 
   const load = async () => {
@@ -128,7 +128,6 @@ export default function Admin() {
       if (error) {
         toast.error(error.message);
       } else {
-        // Insert any pending images
         if (data && pendingImages.length) {
           const rows = pendingImages.map((url, i) => ({
             project_id: data.id,
@@ -156,6 +155,7 @@ export default function Admin() {
       date: p.date ?? '',
       client: p.client ?? '',
       tools: p.tools ?? '',
+      featured: p.featured ?? false,
     });
     setPendingImages([]);
     await loadImages(p.id);
@@ -164,12 +164,23 @@ export default function Admin() {
 
   const remove = async (id: string) => {
     if (!confirm('Delete this project? Its images will be removed too.')) return;
-    // Delete images first (in case no cascade)
     await supabase.from('project_images').delete().eq('project_id', id);
     const { error } = await supabase.from('projects').delete().eq('id', id);
     if (error) toast.error(error.message);
     else {
       toast.success('Project deleted');
+      load();
+    }
+  };
+
+  const toggleFeatured = async (p: SupabaseProject) => {
+    const { error } = await supabase
+      .from('projects')
+      .update({ featured: !p.featured })
+      .eq('id', p.id);
+    if (error) toast.error(error.message);
+    else {
+      toast.success(p.featured ? 'Removed from featured' : 'Added to featured ⭐');
       load();
     }
   };
@@ -263,6 +274,20 @@ export default function Admin() {
               <Label htmlFor="description">Description</Label>
               <Textarea id="description" rows={4} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
             </div>
+            <div className="md:col-span-2">
+              <label className="flex items-center gap-3 cursor-pointer select-none w-fit">
+                <div
+                  onClick={() => setForm({ ...form, featured: !form.featured })}
+                  className={`w-11 h-6 rounded-full transition-colors duration-200 flex items-center px-1 ${form.featured ? 'bg-[#D68A4E]' : 'bg-muted-foreground/30'}`}
+                >
+                  <div className={`w-4 h-4 rounded-full bg-white shadow transition-transform duration-200 ${form.featured ? 'translate-x-5' : 'translate-x-0'}`} />
+                </div>
+                <span className="flex items-center gap-2 text-sm font-medium">
+                  <Star className={`w-4 h-4 ${form.featured ? 'text-[#D68A4E] fill-[#D68A4E]' : 'text-muted-foreground'}`} />
+                  {form.featured ? 'Featured — shown on Home page' : 'Not featured'}
+                </span>
+              </label>
+            </div>
           </div>
 
           {/* Gallery images manager */}
@@ -286,7 +311,6 @@ export default function Admin() {
               <Button type="button" onClick={addImage} variant="outline">Add</Button>
             </div>
 
-            {/* Existing images (when editing) */}
             {editingId && images.length > 0 && (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                 {images.map((img, i) => (
@@ -311,7 +335,6 @@ export default function Admin() {
               </div>
             )}
 
-            {/* Pending images (new project) */}
             {!editingId && pendingImages.length > 0 && (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                 {pendingImages.map((url, i) => (
@@ -352,11 +375,22 @@ export default function Admin() {
                   <div className="w-16 h-16 bg-muted rounded" />
                 )}
                 <div className="flex-1 min-w-0">
-                  <div className="font-medium truncate">{p.title}</div>
+                  <div className="font-medium truncate flex items-center gap-2">
+                    {p.title}
+                    {p.featured && <Star className="w-3 h-3 text-[#D68A4E] fill-[#D68A4E]" />}
+                  </div>
                   <div className="text-xs text-muted-foreground">
                     {p.category} · {p.date}
                   </div>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => toggleFeatured(p)}
+                  title={p.featured ? 'Remove from featured' : 'Add to featured'}
+                  className={`p-2 rounded-md border transition-colors ${p.featured ? 'border-[#D68A4E] text-[#D68A4E]' : 'border-border text-muted-foreground hover:border-[#D68A4E] hover:text-[#D68A4E]'}`}
+                >
+                  <Star className={`w-4 h-4 ${p.featured ? 'fill-[#D68A4E]' : ''}`} />
+                </button>
                 <Button size="sm" variant="outline" onClick={() => edit(p)}>
                   <Pencil className="w-4 h-4" />
                 </Button>
