@@ -33,7 +33,7 @@ export default function LoadingScreen() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            style={{ width: "340px", objectFit: "contain" }}
+            style={{ width: "420px", objectFit: "contain" }}
           />
         </motion.div>
       )}
