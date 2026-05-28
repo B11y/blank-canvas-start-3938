@@ -1,4 +1,5 @@
 import LoadingScreen from "./components/LoadingScreen";
+import SmoothScroll from "./components/SmoothScroll";
 import CustomCursor from "./components/CustomCursor";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -50,6 +51,7 @@ const App = () => {
   return (
     <>
     <LoadingScreen />
+    <SmoothScroll />
     <CustomCursor />
       <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
