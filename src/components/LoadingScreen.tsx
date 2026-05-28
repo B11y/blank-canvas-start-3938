@@ -5,7 +5,7 @@ export default function LoadingScreen() {
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => setVisible(false), 2500);
+    const timer = setTimeout(() => setVisible(false), 2800);
     return () => clearTimeout(timer);
   }, []);
 
@@ -25,22 +25,39 @@ export default function LoadingScreen() {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            gap: "0px",
           }}
         >
-          {/* Logo Image */}
-          <motion.img
-            src="/favicon.png"
-            alt="IM Design Studio"
-            initial={{ opacity: 0, y: 20 }}
+          {/* IM */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            style={{ width: "80px", height: "80px", objectFit: "contain" }}
-          />
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "2px",
+              marginBottom: "12px",
+            }}
+          >
+            <span style={{
+              fontSize: "3.5rem",
+              fontWeight: "800",
+              color: "#213A70",
+              lineHeight: 1,
+              letterSpacing: "-2px",
+            }}>I</span>
+            <span style={{
+              fontSize: "3.5rem",
+              fontWeight: "800",
+              color: "#213A70",
+              lineHeight: 1,
+              letterSpacing: "-2px",
+            }}>M</span>
+          </motion.div>
 
           {/* Design Studio */}
           <motion.p
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.5 }}
             style={{
@@ -48,8 +65,7 @@ export default function LoadingScreen() {
               fontSize: "1.6rem",
               fontWeight: "600",
               letterSpacing: "0.05em",
-              margin: "12px 0 8px",
-              fontFamily: "inherit",
+              margin: "0 0 10px 0",
             }}
           >
             Design Studio
@@ -57,16 +73,15 @@ export default function LoadingScreen() {
 
           {/* Tagline */}
           <motion.p
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.8 }}
             style={{
               color: "#D68A4E99",
-              fontSize: "0.7rem",
-              letterSpacing: "0.25em",
+              fontSize: "0.65rem",
+              letterSpacing: "0.3em",
               textTransform: "uppercase",
               margin: 0,
-              fontFamily: "inherit",
             }}
           >
             Where Ink Meets Mind
