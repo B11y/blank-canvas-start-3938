@@ -47,6 +47,7 @@ const App = () => {
     document.documentElement.classList.add("dark");
   }
   return (
+    <>
     <LoadingScreen />
       <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
@@ -66,6 +67,7 @@ const App = () => {
         </ThemeProvider>
       </QueryClientProvider>
     </ErrorBoundary>
+    </>
   );
 };
 
