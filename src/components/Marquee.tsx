@@ -7,7 +7,6 @@ const items = [
   "SOCIAL MEDIA",
   "PRINT DESIGN",
   "PACKAGING",
-  "UI/UX",
   "TYPOGRAPHY",
 ];
 
