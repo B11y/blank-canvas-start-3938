@@ -1,4 +1,4 @@
-import { Toaster } from "@/components/ui/toaster";
+import LoadingScreen from "./components/LoadingScreen";nimport { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -46,7 +46,7 @@ const App = () => {
     document.documentElement.classList.add("dark");
   }
   return (
-    <ErrorBoundary>
+    <LoadingScreen />n      <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
           <TooltipProvider>
