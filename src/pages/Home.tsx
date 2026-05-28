@@ -5,6 +5,7 @@ import { ScrollIndicator } from '@/components/ui/ScrollIndicator';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { SEOHead } from '@/components/seo/SEOHead';
 import { ArrowRight } from 'lucide-react';
+import Marquee from '@/components/Marquee';
 import { Link } from 'react-router-dom';
 
 export default function Home() {
@@ -118,7 +119,8 @@ export default function Home() {
             </div>
           </ScrollReveal>
 
-          <FeaturedProjectsSection />
+          <Marquee />
+      <FeaturedProjectsSection />
 
           <ScrollReveal delay={0.4}>
             <div className="flex justify-center mt-16 px-6">
