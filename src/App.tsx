@@ -1,4 +1,5 @@
 import LoadingScreen from "./components/LoadingScreen";
+import CustomCursor from "./components/CustomCursor";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -49,6 +50,7 @@ const App = () => {
   return (
     <>
     <LoadingScreen />
+    <CustomCursor />
       <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
