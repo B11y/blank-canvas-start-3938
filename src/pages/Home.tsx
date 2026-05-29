@@ -38,15 +38,15 @@ export default function Home() {
           <div className="relative h-full flex flex-col items-center justify-center px-6">
             <motion.div
               className="text-center space-y-6 max-w-4xl"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, ease: "easeOut" }}
+              initial={{ opacity: 0, y: 40, filter: 'blur(12px)' }}
+              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
               <motion.h1
                 className="text-6xl md:text-8xl lg:text-9xl font-extralight tracking-widest text-white"
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: 0.2 }}
+                transition={{ duration: 1.2, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
               >
                 {photographerInfo.name.toUpperCase()}
               </motion.h1>
@@ -55,7 +55,7 @@ export default function Home() {
                 className="text-xl md:text-2xl font-light tracking-wide text-white/90"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: 0.4 }}
+                transition={{ duration: 1, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
               >
                 {photographerInfo.tagline}
               </motion.p>
@@ -64,7 +64,7 @@ export default function Home() {
                 className="text-base md:text-lg font-light leading-relaxed text-white/80 max-w-2xl mx-auto"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: 0.6 }}
+                transition={{ duration: 1, delay: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
               >
                 {photographerInfo.heroIntroduction}
               </motion.p>
@@ -74,7 +74,7 @@ export default function Home() {
               className="absolute bottom-12"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 1.2, duration: 0.8 }}
+              transition={{ delay: 1.4, duration: 0.8 }}
             >
               <ScrollIndicator />
             </motion.div>
@@ -84,31 +84,35 @@ export default function Home() {
         {/* Introduction Section */}
         <section className="py-24 md:py-32 px-6 lg:px-8 bg-background">
           <div className="max-w-4xl mx-auto text-center space-y-8">
-            <ScrollReveal>
-              <div className="space-y-6">
-                <h2 className="text-3xl md:text-4xl font-light tracking-wide">
-                  About My Work
-                </h2>
-                <div className="space-y-4 text-lg font-light leading-relaxed text-muted-foreground">
-                  <p>
-                    {photographerInfo.biography.split('\n\n')[0]}
-                  </p>
-                </div>
-                <Link
-                  to="/about"
-                  className="inline-flex items-center gap-2 text-base font-light tracking-wide text-foreground hover:text-muted-foreground transition-colors group"
-                >
-                  <span>Learn More About Me</span>
-                  <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
-                </Link>
+            <ScrollReveal direction="up">
+              <h2 className="text-3xl md:text-4xl font-light tracking-wide">
+                About My Work
+              </h2>
+            </ScrollReveal>
+
+            <ScrollReveal direction="up" delay={0.15}>
+              <div className="space-y-4 text-lg font-light leading-relaxed text-muted-foreground">
+                <p>
+                  {photographerInfo.biography.split('\n\n')[0]}
+                </p>
               </div>
+            </ScrollReveal>
+
+            <ScrollReveal direction="up" delay={0.25}>
+              <Link
+                to="/about"
+                className="inline-flex items-center gap-2 text-base font-light tracking-wide text-foreground hover:text-gold transition-colors duration-300 group"
+              >
+                <span>Learn More About Me</span>
+                <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+              </Link>
             </ScrollReveal>
           </div>
         </section>
 
         {/* Featured Projects Section */}
         <section className="py-24 md:py-32 border-t border-border">
-          <ScrollReveal>
+          <ScrollReveal direction="up">
             <div className="text-center mb-16 space-y-4 px-6">
               <h2 className="text-4xl md:text-5xl font-light tracking-wide">
                 Featured Projects
@@ -120,13 +124,13 @@ export default function Home() {
           </ScrollReveal>
 
           <Marquee />
-      <FeaturedProjectsSection />
+          <FeaturedProjectsSection />
 
-          <ScrollReveal delay={0.4}>
+          <ScrollReveal direction="up" delay={0.2}>
             <div className="flex justify-center mt-16 px-6">
               <Link
                 to="/portfolio"
-                className="group inline-flex items-center gap-2 text-lg font-light tracking-wide text-foreground hover:text-muted-foreground transition-colors"
+                className="group inline-flex items-center gap-2 text-lg font-light tracking-wide text-foreground hover:text-gold transition-colors duration-300"
               >
                 <span>View All Projects</span>
                 <ArrowRight className="size-5 transition-transform group-hover:translate-x-1" />
