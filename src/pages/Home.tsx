@@ -3,6 +3,7 @@ import { photographerInfo } from '@/data/photographer';
 import { FeaturedProjectsSection } from '@/components/portfolio/FeaturedProjectsSection';
 import { ScrollIndicator } from '@/components/ui/ScrollIndicator';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
+import { MagneticButton } from '@/components/ui/MagneticButton';
 import { SEOHead } from '@/components/seo/SEOHead';
 import { ArrowRight } from 'lucide-react';
 import Marquee from '@/components/Marquee';
@@ -99,13 +100,15 @@ export default function Home() {
             </ScrollReveal>
 
             <ScrollReveal direction="up" delay={0.25}>
-              <Link
-                to="/about"
-                className="inline-flex items-center gap-2 text-base font-light tracking-wide text-foreground hover:text-gold transition-colors duration-300 group"
-              >
-                <span>Learn More About Me</span>
-                <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
-              </Link>
+              <MagneticButton>
+                <Link
+                  to="/about"
+                  className="inline-flex items-center gap-2 text-base font-light tracking-wide text-foreground hover:text-gold transition-colors duration-300 group"
+                >
+                  <span>Learn More About Me</span>
+                  <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </MagneticButton>
             </ScrollReveal>
           </div>
         </section>
@@ -128,13 +131,15 @@ export default function Home() {
 
           <ScrollReveal direction="up" delay={0.2}>
             <div className="flex justify-center mt-16 px-6">
-              <Link
-                to="/portfolio"
-                className="group inline-flex items-center gap-2 text-lg font-light tracking-wide text-foreground hover:text-gold transition-colors duration-300"
-              >
-                <span>View All Projects</span>
-                <ArrowRight className="size-5 transition-transform group-hover:translate-x-1" />
-              </Link>
+              <MagneticButton>
+                <Link
+                  to="/portfolio"
+                  className="group inline-flex items-center gap-2 text-lg font-light tracking-wide text-foreground hover:text-gold transition-colors duration-300"
+                >
+                  <span>View All Projects</span>
+                  <ArrowRight className="size-5 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </MagneticButton>
             </div>
           </ScrollReveal>
         </section>
