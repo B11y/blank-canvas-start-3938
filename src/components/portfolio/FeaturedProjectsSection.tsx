@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { supabase, type SupabaseProject } from '@/lib/supabase';
+import { optimizeImage } from '@/lib/cloudinary';
 
 export function FeaturedProjectsSection() {
   const [projects, setProjects] = useState<SupabaseProject[]>([]);

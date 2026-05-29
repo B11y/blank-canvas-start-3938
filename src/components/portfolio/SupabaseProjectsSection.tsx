@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { supabase, type SupabaseProject } from '@/lib/supabase';
+import { optimizeImage } from '@/lib/cloudinary';
 
 export function SupabaseProjectsSection() {
   const [projects, setProjects] = useState<SupabaseProject[]>([]);
@@ -52,7 +53,7 @@ export function SupabaseProjectsSection() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto px-6">
       {projects.map((project, i) => {
-        const thumb = thumbs[project.id] || project.image_url;
+        const thumb = optimizeImage(thumbs[project.id] || project.image_url);
         return (
           <motion.article
             key={project.id}
