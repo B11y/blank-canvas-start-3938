@@ -28,7 +28,7 @@ export default function LoadingScreen() {
           }}
         >
           <motion.img
-            src="/loading.png"
+            src="/loading.webp"
             alt="IM Design Studio"
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
