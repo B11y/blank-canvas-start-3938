@@ -56,30 +56,49 @@ export function SupabaseProjectsSection() {
         return (
           <motion.article
             key={project.id}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: i * 0.05 }}
-            className="group overflow-hidden rounded-lg border border-border bg-card"
+            transition={{ duration: 0.6, delay: i * 0.08 }}
+            className="group overflow-hidden rounded-lg border border-border/50 bg-card hover:border-gold/40 transition-colors duration-500"
+            style={{ willChange: 'transform' }}
           >
             <Link to={`/projects/${project.id}`} className="block">
+
+              {/* Image Container */}
               {thumb && (
-                <div className="aspect-[4/3] overflow-hidden bg-muted">
+                <div className="aspect-[4/3] overflow-hidden bg-muted relative">
+
+                  {/* Grayscale → Color + Zoom */}
                   <img
                     src={thumb}
                     alt={project.title}
                     loading="lazy"
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="w-full h-full object-cover transition-all duration-700 ease-out group-hover:scale-105 grayscale group-hover:grayscale-0"
                   />
+
+                  {/* Dark Overlay */}
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all duration-500 ease-out" />
+
+                  {/* View Project Button */}
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out translate-y-3 group-hover:translate-y-0">
+                    <span className="text-white text-xs uppercase tracking-[0.25em] border border-white/60 px-6 py-2.5 backdrop-blur-sm">
+                      View Project
+                    </span>
+                  </div>
+
                 </div>
               )}
+
+              {/* Text Content */}
               <div className="p-5 space-y-2">
                 <div className="flex items-center justify-between text-xs uppercase tracking-wider text-muted-foreground">
-                  <span>{project.category}</span>
+                  <span className="transition-colors duration-300 group-hover:text-gold">{project.category}</span>
                   <time>{project.date}</time>
                 </div>
-                <h3 className="text-xl font-medium">{project.title}</h3>
+                <h3 className="text-xl font-medium transition-colors duration-300 group-hover:text-gold">{project.title}</h3>
                 <p className="text-sm text-muted-foreground line-clamp-3">{project.description}</p>
               </div>
+
             </Link>
           </motion.article>
         );
