@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef } from 'react';
 import { photographerInfo } from '@/data/photographer';
 import { FeaturedProjectsSection } from '@/components/portfolio/FeaturedProjectsSection';
 import { ScrollIndicator } from '@/components/ui/ScrollIndicator';
@@ -10,14 +11,24 @@ import Marquee from '@/components/Marquee';
 import { Link } from 'react-router-dom';
 
 export default function Home() {
+  const heroRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ['start start', 'end start'],
+  });
+  const videoY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
+
   return (
     <>
       <SEOHead />
       
       <div className="min-h-screen">
         {/* Hero Section */}
-        <section className="relative h-screen w-full overflow-hidden">
-          <div className="absolute inset-0">
+        <section ref={heroRef} className="relative h-screen w-full overflow-hidden">
+          <motion.div
+            className="absolute inset-0"
+            style={{ y: videoY }}
+          >
             <video
               autoPlay
               muted
@@ -25,7 +36,7 @@ export default function Home() {
               playsInline
               preload="metadata"
               poster="https://images.pexels.com/videos/2675516/free-video-2675516.jpg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover scale-110"
               onError={(e) => {
                 const target = e.currentTarget;
                 target.style.opacity = '0';
@@ -34,7 +45,7 @@ export default function Home() {
               <source src="https://videos.pexels.com/video-files/2675516/2675516-sd_960_540_24fps.mp4" type="video/mp4" />
             </video>
             <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/60" />
-          </div>
+          </motion.div>
 
           <div className="relative h-full flex flex-col items-center justify-center px-6">
             <motion.div
