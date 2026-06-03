@@ -41,7 +41,7 @@ export function FeaturedProjectsSection() {
           <Link to={`/projects/${project.id}`} className="block aspect-[16/10] overflow-hidden">
             {project.image_url ? (
               <img
-                src={project.image_url}
+                src={optimizeImage(project.image_url)}
                 alt={project.title}
                 loading="lazy"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
