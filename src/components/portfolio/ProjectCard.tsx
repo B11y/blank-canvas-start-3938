@@ -53,14 +53,14 @@ export function ProjectCard({
             className={cn(
               'absolute inset-0 w-full h-full object-cover transition-all duration-700',
               isLoaded ? 'opacity-100' : 'opacity-0',
-              'group-hover:scale-110'
+              'md:group-hover:scale-110'
             )}
             loading={index < 6 ? 'eager' : 'lazy'}
             onLoad={() => setIsLoaded(true)}
           />
           
           {/* Overlay with gradient and text */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-500">
             <div className="absolute bottom-0 left-0 right-0 p-6 space-y-2">
               <h3 className="text-white text-xl md:text-2xl font-light tracking-wide">
                 {project.title}
@@ -76,7 +76,7 @@ export function ProjectCard({
           </div>
 
           {/* Subtle hover border effect */}
-          <div className="absolute inset-0 border-2 border-white/0 group-hover:border-white/10 transition-colors duration-500" />
+          <div className="absolute inset-0 border-2 border-white/0 md:group-hover:border-white/10 transition-colors duration-500" />
         </div>
       </Link>
     </motion.div>

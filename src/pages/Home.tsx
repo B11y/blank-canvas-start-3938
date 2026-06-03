@@ -24,7 +24,7 @@ export default function Home() {
       
       <div className="min-h-screen">
         {/* Hero Section */}
-        <section ref={heroRef} className="relative h-screen w-full overflow-hidden">
+        <section ref={heroRef} className="relative min-h-[100svh] w-full overflow-hidden">
           <motion.div
             className="absolute inset-0"
             style={{ y: videoY }}
@@ -47,7 +47,7 @@ export default function Home() {
             <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/60" />
           </motion.div>
 
-          <div className="relative h-full flex flex-col items-center justify-center px-6">
+          <div className="relative min-h-[100svh] flex flex-col items-center justify-center px-6">
             <motion.div
               className="text-center space-y-6 max-w-4xl"
               initial={{ opacity: 0, y: 40, filter: 'blur(12px)' }}
@@ -55,7 +55,7 @@ export default function Home() {
               transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
               <motion.h1
-                className="text-6xl md:text-8xl lg:text-9xl font-extralight tracking-widest text-white"
+                className="text-4xl sm:text-5xl md:text-8xl lg:text-9xl font-extralight tracking-widest text-white"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1.2, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
@@ -83,7 +83,7 @@ export default function Home() {
             </motion.div>
 
             <motion.div
-              className="absolute bottom-12"
+              className="absolute bottom-8 sm:bottom-12"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.4, duration: 0.8 }}
