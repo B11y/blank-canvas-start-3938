@@ -55,7 +55,7 @@ export default function Home() {
               transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
               <motion.h1
-                className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extralight tracking-wide md:tracking-widest text-white"
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extralight tracking-wide md:tracking-wider text-white md:whitespace-nowrap"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1.2, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
