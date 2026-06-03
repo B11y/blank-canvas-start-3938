@@ -1,4 +1,5 @@
-import { useEffect, useState, FormEvent } from 'react';
+import { useCallback, useEffect, useState, FormEvent } from 'react';
+import type { Session } from '@supabase/supabase-js';
 import { supabase, type SupabaseProject, type SupabaseProjectImage } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,8 +9,7 @@ import { SEOHead } from '@/components/seo/SEOHead';
 import { toast } from 'sonner';
 import { Pencil, Trash2, LogOut, Plus, X, ImagePlus, ArrowUp, ArrowDown, Star } from 'lucide-react';
 
-const ADMIN_PASSWORD = 'IM2024admin';
-const AUTH_KEY = 'admin_authed';
+type AuthStatus = 'checking' | 'signed-out' | 'unauthorized' | 'authorized';
 
 type FormState = {
   title: string;
@@ -33,43 +33,105 @@ const emptyForm: FormState = {
   featured: false,
 };
 
-function LoginGate({ onAuth }: { onAuth: () => void }) {
+function LoginGate({ onSignedIn }: { onSignedIn: (session: Session | null) => void }) {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const submit = (e: FormEvent) => {
+  const submit = async (e: FormEvent) => {
     e.preventDefault();
-    if (password === ADMIN_PASSWORD) {
-      sessionStorage.setItem(AUTH_KEY, '1');
-      onAuth();
-    } else {
-      setError('Wrong password');
+    setError('');
+    setLoading(true);
+
+    const { data, error: signInError } = await supabase.auth.signInWithPassword({
+      email: email.trim(),
+      password,
+    });
+
+    if (signInError) {
+      setError(signInError.message);
+      setLoading(false);
+      return;
     }
+
+    onSignedIn(data.session);
+    setLoading(false);
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center px-6">
       <form onSubmit={submit} className="w-full max-w-sm space-y-4 p-8 border border-border rounded-lg bg-card">
-        <h1 className="text-2xl font-light">Admin Login</h1>
+        <div className="space-y-2">
+          <h1 className="text-2xl font-light">Admin Login</h1>
+          <p className="text-sm text-muted-foreground">
+            Sign in with an approved Supabase admin account. Passwords are no longer stored in the app bundle.
+          </p>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="email">Email</Label>
+          <Input
+            id="email"
+            type="email"
+            autoComplete="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            autoFocus
+          />
+        </div>
+
         <div className="space-y-2">
           <Label htmlFor="password">Password</Label>
           <Input
             id="password"
             type="password"
+            autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            autoFocus
+            required
           />
           {error && <p className="text-sm text-destructive">{error}</p>}
         </div>
-        <Button type="submit" className="w-full">Sign in</Button>
+
+        <Button type="submit" className="w-full" disabled={loading}>
+          {loading ? 'Signing in…' : 'Sign in'}
+        </Button>
       </form>
     </div>
   );
 }
 
+function CheckingGate() {
+  return (
+    <div className="min-h-screen flex items-center justify-center px-6 text-muted-foreground">
+      Checking admin access…
+    </div>
+  );
+}
+
+function UnauthorizedGate({ email, onSignOut }: { email: string; onSignOut: () => void }) {
+  return (
+    <div className="min-h-screen flex items-center justify-center px-6">
+      <div className="w-full max-w-md space-y-4 p-8 border border-border rounded-lg bg-card text-center">
+        <h1 className="text-2xl font-light">Access denied</h1>
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          {email || 'This account'} is authenticated, but it is not listed as an admin user. Add the user id to the
+          <code className="mx-1 rounded bg-muted px-1 py-0.5">admin_users</code>
+          table before using this panel.
+        </p>
+        <Button type="button" variant="outline" onClick={onSignOut} className="w-full">
+          <LogOut className="w-4 h-4 mr-2" /> Sign out
+        </Button>
+      </div>
+    </div>
+  );
+}
+
 export default function Admin() {
-  const [authed, setAuthed] = useState(() => sessionStorage.getItem(AUTH_KEY) === '1');
+  const [authStatus, setAuthStatus] = useState<AuthStatus>('checking');
+  const [sessionEmail, setSessionEmail] = useState('');
   const [projects, setProjects] = useState<SupabaseProject[]>([]);
   const [form, setForm] = useState<FormState>(emptyForm);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -79,14 +141,14 @@ export default function Admin() {
   const [newImageUrl, setNewImageUrl] = useState('');
   const [pendingImages, setPendingImages] = useState<string[]>([]);
 
-  const load = async () => {
+  const load = useCallback(async () => {
     const { data, error } = await supabase
       .from('projects')
       .select('*')
       .order('date', { ascending: false });
     if (error) toast.error(error.message);
     else setProjects(data ?? []);
-  };
+  }, []);
 
   const loadImages = async (projectId: string) => {
     const { data, error } = await supabase
@@ -98,11 +160,47 @@ export default function Admin() {
     else setImages(data ?? []);
   };
 
-  useEffect(() => {
-    if (authed) load();
-  }, [authed]);
+  const checkAdminSession = useCallback(async (session: Session | null) => {
+    if (!session) {
+      setSessionEmail('');
+      setProjects([]);
+      setAuthStatus('signed-out');
+      return;
+    }
 
-  if (!authed) return <LoginGate onAuth={() => setAuthed(true)} />;
+    setAuthStatus('checking');
+    setSessionEmail(session.user.email ?? '');
+
+    const { data: isAdmin, error } = await supabase.rpc('is_admin');
+
+    if (error) {
+      console.error('Admin role check failed', error);
+      toast.error('Admin security is not configured. Apply the Supabase RLS migration first.');
+      await supabase.auth.signOut();
+      setAuthStatus('signed-out');
+      return;
+    }
+
+    if (!isAdmin) {
+      setAuthStatus('unauthorized');
+      return;
+    }
+
+    setAuthStatus('authorized');
+    await load();
+  }, [load]);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      void checkAdminSession(data.session);
+    });
+
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      void checkAdminSession(session);
+    });
+
+    return () => listener.subscription.unsubscribe();
+  }, [checkAdminSession]);
 
   const reset = () => {
     setForm(emptyForm);
@@ -112,37 +210,51 @@ export default function Admin() {
     setNewImageUrl('');
   };
 
+  const signOut = async () => {
+    reset();
+    await supabase.auth.signOut();
+    setAuthStatus('signed-out');
+  };
+
+  if (authStatus === 'checking') return <CheckingGate />;
+  if (authStatus === 'signed-out') return <LoginGate onSignedIn={checkAdminSession} />;
+  if (authStatus === 'unauthorized') return <UnauthorizedGate email={sessionEmail} onSignOut={signOut} />;
+
   const submit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    if (editingId) {
-      const { error } = await supabase.from('projects').update(form).eq('id', editingId);
-      if (error) toast.error(error.message);
-      else {
-        toast.success('Project updated');
-        reset();
-        load();
-      }
-    } else {
-      const { data, error } = await supabase.from('projects').insert(form).select().single();
-      if (error) {
-        toast.error(error.message);
-      } else {
-        if (data && pendingImages.length) {
-          const rows = pendingImages.map((url, i) => ({
-            project_id: data.id,
-            image_url: url,
-            sort_order: i,
-          }));
-          const { error: imgErr } = await supabase.from('project_images').insert(rows);
-          if (imgErr) toast.error('Project added, but images failed: ' + imgErr.message);
+
+    try {
+      if (editingId) {
+        const { error } = await supabase.from('projects').update(form).eq('id', editingId);
+        if (error) toast.error(error.message);
+        else {
+          toast.success('Project updated');
+          reset();
+          await load();
         }
-        toast.success('Project added');
-        reset();
-        load();
+      } else {
+        const { data, error } = await supabase.from('projects').insert(form).select().single();
+        if (error) {
+          toast.error(error.message);
+        } else {
+          if (data && pendingImages.length) {
+            const rows = pendingImages.map((url, i) => ({
+              project_id: data.id,
+              image_url: url,
+              sort_order: i,
+            }));
+            const { error: imgErr } = await supabase.from('project_images').insert(rows);
+            if (imgErr) toast.error('Project added, but images failed: ' + imgErr.message);
+          }
+          toast.success('Project added');
+          reset();
+          await load();
+        }
       }
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const edit = async (p: SupabaseProject) => {
@@ -169,7 +281,7 @@ export default function Admin() {
     if (error) toast.error(error.message);
     else {
       toast.success('Project deleted');
-      load();
+      await load();
     }
   };
 
@@ -181,7 +293,7 @@ export default function Admin() {
     if (error) toast.error(error.message);
     else {
       toast.success(p.featured ? 'Removed from featured' : 'Added to featured ⭐');
-      load();
+      await load();
     }
   };
 
@@ -225,23 +337,21 @@ export default function Admin() {
     if (editingId) loadImages(editingId);
   };
 
-  const logout = () => {
-    sessionStorage.removeItem(AUTH_KEY);
-    setAuthed(false);
-  };
-
   return (
     <>
       <SEOHead title="Admin" description="Manage portfolio projects" />
       <div className="min-h-screen max-w-5xl mx-auto px-6 py-12 space-y-10">
         <header className="flex items-center justify-between">
-          <h1 className="text-3xl font-light">Projects Admin</h1>
-          <Button variant="outline" size="sm" onClick={logout}>
+          <div>
+            <h1 className="text-3xl font-light">Projects Admin</h1>
+            {sessionEmail && <p className="text-xs text-muted-foreground mt-1">Signed in as {sessionEmail}</p>}
+          </div>
+          <Button variant="outline" size="sm" onClick={signOut}>
             <LogOut className="w-4 h-4 mr-2" /> Logout
           </Button>
         </header>
 
-        <form onSubmit={submit} className="space-y-4 p-6 border border-border rounded-lg bg-card">
+        <form onSubmit={submit} className="space-y-6 p-6 border border-border rounded-lg bg-card">
           <h2 className="text-xl font-medium flex items-center gap-2">
             <Plus className="w-5 h-5" /> {editingId ? 'Edit project' : 'Add new project'}
           </h2>
@@ -252,11 +362,11 @@ export default function Admin() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="category">Category</Label>
-              <Input id="category" required value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} placeholder="branding, social-media, …" />
+              <Input id="category" required value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} placeholder="Brand Identity" />
             </div>
             <div className="space-y-2 md:col-span-2">
-              <Label htmlFor="image_url">Cover image URL (used as thumbnail)</Label>
-              <Input id="image_url" type="url" value={form.image_url} onChange={(e) => setForm({ ...form, image_url: e.target.value })} placeholder="https://…" />
+              <Label htmlFor="image_url">Main Image URL</Label>
+              <Input id="image_url" type="url" value={form.image_url} onChange={(e) => setForm({ ...form, image_url: e.target.value })} placeholder="https://..." />
             </div>
             <div className="space-y-2">
               <Label htmlFor="date">Date</Label>
