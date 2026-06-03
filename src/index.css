@@ -190,6 +190,7 @@ All colors MUST be HSL.
 @layer base {
   * {
     @apply border-border;
+    cursor: none !important;
   }
 
   body {

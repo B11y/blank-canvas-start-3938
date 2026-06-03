@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { photographerInfo } from '@/data/photographer';
 import { FeaturedProjectsSection } from '@/components/portfolio/FeaturedProjectsSection';
 import { ScrollIndicator } from '@/components/ui/ScrollIndicator';
@@ -9,14 +9,58 @@ import { SEOHead } from '@/components/seo/SEOHead';
 import { ArrowRight } from 'lucide-react';
 import Marquee from '@/components/Marquee';
 import { Link } from 'react-router-dom';
+import { useDesktop } from '@/hooks/useDesktop';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
+
+const heroPoster =
+  'https://images.pexels.com/videos/2675516/free-video-2675516.jpg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200';
+
+const heroVideo =
+  'https://videos.pexels.com/video-files/2675516/2675516-sd_960_540_24fps.mp4';
 
 export default function Home() {
   const heroRef = useRef(null);
+  const isDesktop = useDesktop(1024);
+  const reducedMotion = useReducedMotion();
+  const [showHeroVideo, setShowHeroVideo] = useState(false);
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ['start start', 'end start'],
   });
-  const videoY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
+  const videoY = useTransform(scrollYProgress, [0, 1], ['0%', reducedMotion ? '0%' : '20%']);
+
+  useEffect(() => {
+    if (!isDesktop || reducedMotion) {
+      setShowHeroVideo(false);
+      return;
+    }
+
+    const canUseConnection =
+      typeof navigator === 'undefined' ||
+      !('connection' in navigator) ||
+      !((navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData);
+
+    if (!canUseConnection) {
+      setShowHeroVideo(false);
+      return;
+    }
+
+    const scheduleVideo = () => setShowHeroVideo(true);
+
+    if ('requestIdleCallback' in window) {
+      const idleId = window.requestIdleCallback(scheduleVideo, { timeout: 1600 });
+      return () => window.cancelIdleCallback(idleId);
+    }
+
+    const timer = window.setTimeout(scheduleVideo, 900);
+    return () => window.clearTimeout(timer);
+  }, [isDesktop, reducedMotion]);
+
+  const heroTextInitial = reducedMotion ? false : { opacity: 0, y: 24 };
+  const heroTextAnimate = { opacity: 1, y: 0 };
+  const heroTextTransition = reducedMotion
+    ? { duration: 0 }
+    : { duration: 0.65, ease: [0.25, 0.46, 0.45, 0.94] };
 
   return (
     <>
@@ -29,54 +73,63 @@ export default function Home() {
             className="absolute inset-0"
             style={{ y: videoY }}
           >
-            <video
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-              poster="https://images.pexels.com/videos/2675516/free-video-2675516.jpg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200"
-              className="w-full h-full object-cover scale-110"
-              onError={(e) => {
-                const target = e.currentTarget;
-                target.style.opacity = '0';
-              }}
-            >
-              <source src="https://videos.pexels.com/video-files/2675516/2675516-sd_960_540_24fps.mp4" type="video/mp4" />
-            </video>
+            <img
+              src={heroPoster}
+              alt=""
+              fetchPriority="high"
+              className="absolute inset-0 w-full h-full object-cover scale-105"
+            />
+
+            {showHeroVideo && (
+              <video
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="none"
+                poster={heroPoster}
+                className="absolute inset-0 w-full h-full object-cover scale-105"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                }}
+              >
+                <source src={heroVideo} type="video/mp4" />
+              </video>
+            )}
+
             <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/60" />
           </motion.div>
 
           <div className="relative min-h-[100svh] flex flex-col items-center justify-center px-6">
             <motion.div
               className="text-center space-y-6 max-w-4xl"
-              initial={{ opacity: 0, y: 40, filter: 'blur(12px)' }}
-              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+              initial={heroTextInitial}
+              animate={heroTextAnimate}
+              transition={heroTextTransition}
             >
               <motion.h1
                 className="text-4xl sm:text-5xl md:text-8xl lg:text-9xl font-extralight tracking-widest text-white"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1.2, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+                initial={heroTextInitial}
+                animate={heroTextAnimate}
+                transition={heroTextTransition}
               >
                 {photographerInfo.name.toUpperCase()}
               </motion.h1>
               
               <motion.p
                 className="text-xl md:text-2xl font-light tracking-wide text-white/90"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+                initial={heroTextInitial}
+                animate={heroTextAnimate}
+                transition={reducedMotion ? { duration: 0 } : { ...heroTextTransition, delay: 0.12 }}
               >
                 {photographerInfo.tagline}
               </motion.p>
 
               <motion.p
                 className="text-base md:text-lg font-light leading-relaxed text-white/80 max-w-2xl mx-auto"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
+                initial={heroTextInitial}
+                animate={heroTextAnimate}
+                transition={reducedMotion ? { duration: 0 } : { ...heroTextTransition, delay: 0.18 }}
               >
                 {photographerInfo.heroIntroduction}
               </motion.p>
@@ -84,9 +137,9 @@ export default function Home() {
 
             <motion.div
               className="absolute bottom-8 sm:bottom-12"
-              initial={{ opacity: 0 }}
+              initial={reducedMotion ? false : { opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 1.4, duration: 0.8 }}
+              transition={reducedMotion ? { duration: 0 } : { delay: 0.35, duration: 0.45 }}
             >
               <ScrollIndicator />
             </motion.div>
