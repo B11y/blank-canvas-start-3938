@@ -19,7 +19,7 @@ export default function Portfolio() {
       
       <div className="min-h-screen">
         {/* Hero Section */}
-      <section className="relative py-24 md:py-32 px-6 lg:px-8 border-b border-border">
+      <section className="relative py-14 md:py-32 px-6 lg:px-8 border-b border-border">
         <div className="max-w-7xl mx-auto text-center space-y-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

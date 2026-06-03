@@ -74,14 +74,14 @@ export function SupabaseProjectsSection() {
                     src={thumb}
                     alt={project.title}
                     loading="lazy"
-                    className="w-full h-full object-cover transition-all duration-700 ease-out group-hover:scale-105 grayscale group-hover:grayscale-0"
+                    className="w-full h-full object-cover transition-all duration-700 ease-out md:group-hover:scale-105 md:grayscale md:group-hover:grayscale-0"
                   />
 
                   {/* Dark Overlay */}
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all duration-500 ease-out" />
+                  <div className="absolute inset-0 bg-black/0 md:group-hover:bg-black/50 transition-all duration-500 ease-out" />
 
                   {/* View Project Button */}
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out translate-y-3 group-hover:translate-y-0">
+                  <div className="absolute inset-0 hidden md:flex items-center justify-center opacity-0 md:group-hover:opacity-100 transition-all duration-500 ease-out translate-y-3 md:group-hover:translate-y-0">
                     <span className="text-white text-xs uppercase tracking-[0.25em] border border-white/60 px-6 py-2.5 backdrop-blur-sm">
                       View Project
                     </span>
@@ -93,10 +93,10 @@ export function SupabaseProjectsSection() {
               {/* Text Content */}
               <div className="p-5 space-y-2">
                 <div className="flex items-center justify-between text-xs uppercase tracking-wider text-muted-foreground">
-                  <span className="transition-colors duration-300 group-hover:text-gold">{project.category}</span>
+                  <span className="text-gold md:text-muted-foreground md:transition-colors md:duration-300 md:group-hover:text-gold">{project.category}</span>
                   <time>{project.date}</time>
                 </div>
-                <h3 className="text-xl font-medium transition-colors duration-300 group-hover:text-gold">{project.title}</h3>
+                <h3 className="text-xl font-medium text-gold md:text-foreground md:transition-colors md:duration-300 md:group-hover:text-gold">{project.title}</h3>
                 <p className="text-sm text-muted-foreground line-clamp-3">{project.description}</p>
               </div>
 
