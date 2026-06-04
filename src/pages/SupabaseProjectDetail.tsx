@@ -5,7 +5,6 @@ import { ArrowLeft } from 'lucide-react';
 import { supabase, type SupabaseProject } from '@/lib/supabase';
 import { SEOHead } from '@/components/seo/SEOHead';
 import { Separator } from '@/components/ui/separator';
-import { ConversionCTA } from '@/components/ui/ConversionCTA';
 import { getResponsiveImageAttributes } from '@/lib/responsive-image';
 
 export default function SupabaseProjectDetail() {
@@ -156,11 +155,6 @@ export default function SupabaseProjectDetail() {
           </section>
         </div>
       </article>
-
-      <ConversionCTA
-        title="Want a case study like this for your brand?"
-        description="Share your brief and I’ll help you shape a visual identity that feels clear, memorable, and ready to scale."
-      />
     </>
   );
 }
