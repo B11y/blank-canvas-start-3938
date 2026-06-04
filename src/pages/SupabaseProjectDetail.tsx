@@ -153,6 +153,21 @@ export default function SupabaseProjectDetail() {
               <p className="text-base md:text-lg font-light text-foreground">{project.client || '—'}</p>
             </div>
           </section>
+
+          <section className="rounded-sm border border-border bg-accent/40 p-8 md:p-10 text-center space-y-4">
+            <h2 className="text-2xl md:text-3xl font-light tracking-wide">
+              Ready to build a memorable visual system?
+            </h2>
+            <p className="text-muted-foreground font-light leading-relaxed max-w-2xl mx-auto">
+              Share your project goals and I’ll help you shape the right creative direction.
+            </p>
+            <Link
+              to="/contact"
+              className="inline-flex items-center justify-center rounded-full bg-foreground px-7 py-3 text-sm font-medium tracking-wide text-background transition-all duration-300 hover:bg-foreground/90"
+            >
+              Start a Project
+            </Link>
+          </section>
         </div>
       </article>
     </>

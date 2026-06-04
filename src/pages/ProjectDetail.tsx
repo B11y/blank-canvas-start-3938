@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams, Navigate } from 'react-router-dom';
+import { useParams, Navigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Calendar, MapPin, Wrench, User } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
@@ -33,6 +33,25 @@ export default function ProjectDetail() {
   const closeLightbox = () => {
     setLightboxOpen(false);
   };
+
+  const caseStudyData = project as typeof project & {
+    challenge?: string;
+    goal?: string;
+    concept?: string;
+    deliverables?: string;
+    process?: string;
+    result?: string;
+    testimonial?: string;
+  };
+
+  const caseStudySections = [
+    { label: 'Challenge', value: caseStudyData.challenge },
+    { label: 'Goal', value: caseStudyData.goal },
+    { label: 'Concept', value: caseStudyData.concept },
+    { label: 'Deliverables', value: caseStudyData.deliverables },
+    { label: 'Process', value: caseStudyData.process },
+    { label: 'Result', value: caseStudyData.result },
+  ].filter((section): section is { label: string; value: string } => Boolean(section.value?.trim()));
 
   return (
     <>
@@ -105,6 +124,42 @@ export default function ProjectDetail() {
             </p>
           </div>
 
+          {caseStudySections.length > 0 && (
+            <>
+              <Separator />
+
+              <section className="space-y-8">
+                <div className="space-y-3">
+                  <p className="text-xs font-light tracking-[0.24em] uppercase text-muted-foreground">
+                    Case Study
+                  </p>
+                  <h2 className="text-2xl md:text-3xl font-light tracking-wide">
+                    From challenge to visual system
+                  </h2>
+                </div>
+
+                <div className="grid gap-6 md:grid-cols-2">
+                  {caseStudySections.map((section) => (
+                    <div key={section.label} className="space-y-2 border-t border-border pt-5">
+                      <h3 className="text-sm font-medium tracking-[0.2em] uppercase text-muted-foreground">
+                        {section.label}
+                      </h3>
+                      <p className="text-base font-light leading-relaxed text-foreground whitespace-pre-wrap">
+                        {section.value}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                {caseStudyData.testimonial && (
+                  <blockquote className="border-l border-gold pl-6 text-lg md:text-xl font-light leading-relaxed text-foreground">
+                    “{caseStudyData.testimonial}”
+                  </blockquote>
+                )}
+              </section>
+            </>
+          )}
+
           {/* Technical Details */}
           <div className="grid md:grid-cols-2 gap-6 pt-4">
             {project.camera && (
@@ -128,6 +183,23 @@ export default function ProjectDetail() {
           </div>
         </motion.div>
       </section>
+
+        <section className="px-6 lg:px-8 pb-12 md:pb-16">
+          <div className="max-w-4xl mx-auto rounded-sm border border-border bg-accent/40 p-8 md:p-10 text-center space-y-4">
+            <h2 className="text-2xl md:text-3xl font-light tracking-wide">
+              Ready to build a memorable visual system?
+            </h2>
+            <p className="text-muted-foreground font-light leading-relaxed max-w-2xl mx-auto">
+              Share your project goals and I’ll help you shape the right creative direction.
+            </p>
+            <Link
+              to="/contact"
+              className="inline-flex items-center justify-center rounded-full bg-foreground px-7 py-3 text-sm font-medium tracking-wide text-background transition-all duration-300 hover:bg-foreground/90"
+            >
+              Start a Project
+            </Link>
+          </div>
+        </section>
 
         {/* Image Gallery - Edge to edge */}
         <section className="py-12 md:py-16">
