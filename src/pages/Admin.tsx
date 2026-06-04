@@ -20,6 +20,13 @@ type FormState = {
   client: string;
   tools: string;
   featured: boolean;
+  challenge: string;
+  goal: string;
+  concept: string;
+  deliverables: string;
+  process: string;
+  result: string;
+  testimonial: string;
 };
 
 const emptyForm: FormState = {
@@ -31,6 +38,13 @@ const emptyForm: FormState = {
   client: '',
   tools: '',
   featured: false,
+  challenge: '',
+  goal: '',
+  concept: '',
+  deliverables: '',
+  process: '',
+  result: '',
+  testimonial: '',
 };
 
 function LoginGate({ onSignedIn }: { onSignedIn: (session: Session | null) => void }) {
@@ -268,6 +282,13 @@ export default function Admin() {
       client: p.client ?? '',
       tools: p.tools ?? '',
       featured: p.featured ?? false,
+      challenge: p.challenge ?? '',
+      goal: p.goal ?? '',
+      concept: p.concept ?? '',
+      deliverables: p.deliverables ?? '',
+      process: p.process ?? '',
+      result: p.result ?? '',
+      testimonial: p.testimonial ?? '',
     });
     setPendingImages([]);
     await loadImages(p.id);
@@ -383,6 +404,48 @@ export default function Admin() {
             <div className="space-y-2 md:col-span-2">
               <Label htmlFor="description">Description</Label>
               <Textarea id="description" rows={4} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+            </div>
+
+            <div className="space-y-2 md:col-span-2 border-t border-border pt-4">
+              <h3 className="text-base font-medium">Case Study Details</h3>
+              <p className="text-xs text-muted-foreground">
+                These fields turn a project from a simple gallery into a persuasive case study.
+              </p>
+            </div>
+
+            <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="challenge">Challenge</Label>
+              <Textarea id="challenge" rows={3} value={form.challenge} onChange={(e) => setForm({ ...form, challenge: e.target.value })} placeholder="What problem did the client need to solve?" />
+            </div>
+
+            <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="goal">Goal</Label>
+              <Textarea id="goal" rows={3} value={form.goal} onChange={(e) => setForm({ ...form, goal: e.target.value })} placeholder="What was the project objective?" />
+            </div>
+
+            <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="concept">Concept</Label>
+              <Textarea id="concept" rows={3} value={form.concept} onChange={(e) => setForm({ ...form, concept: e.target.value })} placeholder="What creative idea guided the visual direction?" />
+            </div>
+
+            <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="deliverables">Deliverables</Label>
+              <Textarea id="deliverables" rows={3} value={form.deliverables} onChange={(e) => setForm({ ...form, deliverables: e.target.value })} placeholder="Logo, brand guidelines, packaging, social media templates..." />
+            </div>
+
+            <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="process">Process</Label>
+              <Textarea id="process" rows={3} value={form.process} onChange={(e) => setForm({ ...form, process: e.target.value })} placeholder="Research, sketches, design exploration, refinement..." />
+            </div>
+
+            <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="result">Result</Label>
+              <Textarea id="result" rows={3} value={form.result} onChange={(e) => setForm({ ...form, result: e.target.value })} placeholder="What changed after the project? How did the identity help?" />
+            </div>
+
+            <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="testimonial">Testimonial</Label>
+              <Textarea id="testimonial" rows={3} value={form.testimonial} onChange={(e) => setForm({ ...form, testimonial: e.target.value })} placeholder="Optional client quote." />
             </div>
             <div className="md:col-span-2">
               <label className="flex items-center gap-3 cursor-pointer select-none w-fit">

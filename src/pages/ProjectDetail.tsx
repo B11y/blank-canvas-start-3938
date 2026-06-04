@@ -8,6 +8,7 @@ import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { getProjectBySlug } from '@/data/projects';
 import { ImageWithLightbox } from '@/components/portfolio/ImageWithLightbox';
 import { Lightbox } from '@/components/portfolio/Lightbox';
+import { ConversionCTA } from '@/components/ui/ConversionCTA';
 
 /**
  * Project detail page with hero image, gallery, and full-screen lightbox
@@ -155,6 +156,11 @@ export default function ProjectDetail() {
           onNavigate={setCurrentImageIndex}
         />
       </div>
+
+      <ConversionCTA
+        title="Need a visual system with this level of craft?"
+        description="Tell me about your brand and I’ll help turn the brief into a clear, memorable identity system."
+      />
     </>
   );
 }

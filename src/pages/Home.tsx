@@ -9,6 +9,7 @@ import { SEOHead } from '@/components/seo/SEOHead';
 import { ArrowRight } from 'lucide-react';
 import Marquee from '@/components/Marquee';
 import { Link } from 'react-router-dom';
+import { ConversionCTA } from '@/components/ui/ConversionCTA';
 import { useDesktop } from '@/hooks/useDesktop';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 
@@ -113,7 +114,7 @@ export default function Home() {
                 animate={heroTextAnimate}
                 transition={heroTextTransition}
               >
-                {photographerInfo.name.toUpperCase()}
+                BRAND IDENTITY & VISUAL SYSTEMS
               </motion.h1>
               
               <motion.p
@@ -122,7 +123,7 @@ export default function Home() {
                 animate={heroTextAnimate}
                 transition={reducedMotion ? { duration: 0 } : { ...heroTextTransition, delay: 0.12 }}
               >
-                {photographerInfo.tagline}
+                For bold businesses that need to look clear, memorable, and ready to grow.
               </motion.p>
 
               <motion.p
@@ -131,8 +132,29 @@ export default function Home() {
                 animate={heroTextAnimate}
                 transition={reducedMotion ? { duration: 0 } : { ...heroTextTransition, delay: 0.18 }}
               >
-                {photographerInfo.heroIntroduction}
+                I help startups, restaurants, fashion brands, and creators build memorable visual systems — from logos and brand identity to social media and packaging.
               </motion.p>
+
+              <motion.div
+                className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4"
+                initial={heroTextInitial}
+                animate={heroTextAnimate}
+                transition={reducedMotion ? { duration: 0 } : { ...heroTextTransition, delay: 0.25 }}
+              >
+                <Button asChild size="lg" className="w-full sm:w-auto">
+                  <Link to="/portfolio" className="inline-flex items-center gap-2">
+                    View Selected Work
+                    <ArrowRight className="size-4" />
+                  </Link>
+                </Button>
+
+                <Button asChild size="lg" variant="outline" className="w-full sm:w-auto border-white/40 bg-white/10 text-white hover:bg-white hover:text-black">
+                  <Link to="/contact" className="inline-flex items-center gap-2">
+                    Start a Project
+                    <ArrowRight className="size-4" />
+                  </Link>
+                </Button>
+              </motion.div>
             </motion.div>
 
             <motion.div
@@ -207,6 +229,8 @@ export default function Home() {
             </div>
           </ScrollReveal>
         </section>
+
+        <ConversionCTA />
       </div>
     </>
   );

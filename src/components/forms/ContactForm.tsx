@@ -27,14 +27,64 @@ const contactFormSchema = z.object({
     .trim()
     .email({ message: 'Please enter a valid email address' })
     .max(255, { message: 'Email must be less than 255 characters' }),
+  brandName: z
+    .string()
+    .trim()
+    .min(2, { message: 'Brand / company name must be at least 2 characters' })
+    .max(120, { message: 'Brand / company name must be less than 120 characters' }),
+  whatsapp: z
+    .string()
+    .trim()
+    .max(40, { message: 'WhatsApp number must be less than 40 characters' })
+    .optional(),
+  projectType: z
+    .string()
+    .trim()
+    .min(2, { message: 'Please choose or write a project type' })
+    .max(120, { message: 'Project type must be less than 120 characters' }),
+  budgetRange: z
+    .string()
+    .trim()
+    .min(2, { message: 'Please add an estimated budget range' })
+    .max(120, { message: 'Budget range must be less than 120 characters' }),
+  timeline: z
+    .string()
+    .trim()
+    .min(2, { message: 'Please add a target timeline' })
+    .max(120, { message: 'Timeline must be less than 120 characters' }),
   message: z
     .string()
     .trim()
-    .max(1000, { message: 'Message must be less than 1000 characters' })
-    .optional(),
+    .min(20, { message: 'Brief must be at least 20 characters' })
+    .max(1600, { message: 'Brief must be less than 1600 characters' }),
 });
 
 type ContactFormValues = z.infer<typeof contactFormSchema>;
+
+const projectTypeOptions = [
+  'Brand Identity',
+  'Logo Design',
+  'Social Media System',
+  'Packaging Design',
+  'Full Visual Identity',
+  'Other',
+];
+
+const budgetOptions = [
+  'Under $500',
+  '$500 – $1,500',
+  '$1,500 – $3,000',
+  '$3,000+',
+  'Not sure yet',
+];
+
+const timelineOptions = [
+  'ASAP',
+  '2–4 weeks',
+  '1–2 months',
+  '3+ months',
+  'Flexible',
+];
 
 export function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -45,6 +95,11 @@ export function ContactForm() {
     defaultValues: {
       name: '',
       email: '',
+      brandName: '',
+      whatsapp: '',
+      projectType: '',
+      budgetRange: '',
+      timeline: '',
       message: '',
     },
   });
@@ -58,8 +113,13 @@ export function ContactForm() {
         body: JSON.stringify({
           name: data.name,
           email: data.email,
+          brandName: data.brandName,
+          whatsapp: data.whatsapp,
+          projectType: data.projectType,
+          budgetRange: data.budgetRange,
+          timeline: data.timeline,
           message: data.message,
-          _subject: `New inquiry from ${data.name}`,
+          _subject: `New ${data.projectType} inquiry from ${data.name}`,
         }),
       });
 
@@ -92,9 +152,9 @@ export function ContactForm() {
         >
           <CheckCircle2 className="size-16 mx-auto text-green-600 dark:text-green-400" />
         </motion.div>
-        <h3 className="text-2xl font-light tracking-wide">Message Sent!</h3>
+        <h3 className="text-2xl font-light tracking-wide">Brief Sent!</h3>
         <p className="text-muted-foreground font-light leading-relaxed">
-          Thank you for reaching out. I'll get back to you as soon as possible.
+          Thank you for sharing your project details. I’ll review the brief and get back to you as soon as possible.
         </p>
       </motion.div>
     );
@@ -103,63 +163,158 @@ export function ContactForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <div className="grid md:grid-cols-2 gap-6">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-light tracking-wide">
+                  Name <span className="text-destructive">*</span>
+                </FormLabel>
+                <FormControl>
+                  <Input placeholder="Your full name" className="font-light" {...field} />
+                </FormControl>
+                <FormMessage className="text-xs font-light" />
+              </FormItem>
+            )}
+          />
 
-        {/* Name - Required */}
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-light tracking-wide">
+                  Email <span className="text-destructive">*</span>
+                </FormLabel>
+                <FormControl>
+                  <Input type="email" placeholder="your.email@example.com" className="font-light" {...field} />
+                </FormControl>
+                <FormMessage className="text-xs font-light" />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="brandName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-light tracking-wide">
+                  Brand / Company <span className="text-destructive">*</span>
+                </FormLabel>
+                <FormControl>
+                  <Input placeholder="Brand or company name" className="font-light" {...field} />
+                </FormControl>
+                <FormMessage className="text-xs font-light" />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="whatsapp"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-light tracking-wide">
+                  WhatsApp <span className="text-muted-foreground text-xs">(optional)</span>
+                </FormLabel>
+                <FormControl>
+                  <Input placeholder="+20..." className="font-light" {...field} />
+                </FormControl>
+                <FormMessage className="text-xs font-light" />
+              </FormItem>
+            )}
+          />
+        </div>
+
         <FormField
           control={form.control}
-          name="name"
+          name="projectType"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-sm font-light tracking-wide">
-                Name <span className="text-destructive">*</span>
+                Project Type <span className="text-destructive">*</span>
               </FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Your full name"
-                  className="font-light"
+                <select
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm font-light ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                   {...field}
-                />
+                >
+                  <option value="">Select project type</option>
+                  {projectTypeOptions.map((option) => (
+                    <option key={option} value={option}>{option}</option>
+                  ))}
+                </select>
               </FormControl>
               <FormMessage className="text-xs font-light" />
             </FormItem>
           )}
         />
 
-        {/* Email - Required */}
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-sm font-light tracking-wide">
-                Email <span className="text-destructive">*</span>
-              </FormLabel>
-              <FormControl>
-                <Input
-                  type="email"
-                  placeholder="your.email@example.com"
-                  className="font-light"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage className="text-xs font-light" />
-            </FormItem>
-          )}
-        />
+        <div className="grid md:grid-cols-2 gap-6">
+          <FormField
+            control={form.control}
+            name="budgetRange"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-light tracking-wide">
+                  Budget Range <span className="text-destructive">*</span>
+                </FormLabel>
+                <FormControl>
+                  <select
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm font-light ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    {...field}
+                  >
+                    <option value="">Select budget range</option>
+                    {budgetOptions.map((option) => (
+                      <option key={option} value={option}>{option}</option>
+                    ))}
+                  </select>
+                </FormControl>
+                <FormMessage className="text-xs font-light" />
+              </FormItem>
+            )}
+          />
 
-        {/* Message - Optional */}
+          <FormField
+            control={form.control}
+            name="timeline"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-light tracking-wide">
+                  Timeline <span className="text-destructive">*</span>
+                </FormLabel>
+                <FormControl>
+                  <select
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm font-light ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    {...field}
+                  >
+                    <option value="">Select timeline</option>
+                    {timelineOptions.map((option) => (
+                      <option key={option} value={option}>{option}</option>
+                    ))}
+                  </select>
+                </FormControl>
+                <FormMessage className="text-xs font-light" />
+              </FormItem>
+            )}
+          />
+        </div>
+
         <FormField
           control={form.control}
           name="message"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-sm font-light tracking-wide">
-                Message <span className="text-muted-foreground text-xs">(optional)</span>
+                Project Brief <span className="text-destructive">*</span>
               </FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Tell me about your project..."
-                  className="min-h-32 font-light resize-none"
+                  placeholder="Tell me about your brand, goals, audience, deliverables, references, and what success looks like..."
+                  className="min-h-40 font-light resize-none"
                   {...field}
                 />
               </FormControl>
@@ -182,10 +337,10 @@ export function ContactForm() {
           {isSubmitting ? (
             <>
               <Loader2 className="mr-2 size-5 animate-spin" />
-              Sending...
+              Sending Brief...
             </>
           ) : (
-            'Send Message'
+            'Send Project Brief'
           )}
         </Button>
       </form>
