@@ -111,7 +111,7 @@ export function SEOHead({
     upsertMeta('name', 'author', photographerInfo.name);
     upsertMeta('name', 'keywords',
       ['graphic design','brand identity','visual identity','branding','social media design',
-       'logo design','packaging design', photographerInfo.name,'IM Design Studio','Cairo designer'].join(', '));
+       'logo design','packaging design',photographerInfo.name,'IM Design Studio','Cairo designer'].join(', '));
 
     upsertLink('canonical', seo.canonicalUrl);
     upsertLink('alternate', `${seo.baseUrl}${location.pathname}`, { hreflang: 'en' });
