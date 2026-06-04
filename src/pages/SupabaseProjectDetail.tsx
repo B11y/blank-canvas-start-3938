@@ -53,7 +53,14 @@ export default function SupabaseProjectDetail() {
 
   return (
     <>
-      <SEOHead title={project.title} description={project.description} image={cover} type="article" />
+      <SEOHead
+        title={project.title}
+        description={project.description}
+        image={cover}
+        type="article"
+        publishedTime={project.created_at || project.date}
+        modifiedTime={project.created_at || project.date}
+      />
       <article className="min-h-screen">
         {coverImageAttributes && (
           <motion.div
