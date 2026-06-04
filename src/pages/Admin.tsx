@@ -19,6 +19,13 @@ type FormState = {
   date: string;
   client: string;
   tools: string;
+  challenge: string;
+  goal: string;
+  concept: string;
+  deliverables: string;
+  process: string;
+  result: string;
+  testimonial: string;
   featured: boolean;
 };
 
@@ -30,6 +37,13 @@ const emptyForm: FormState = {
   date: new Date().toISOString().slice(0, 10),
   client: '',
   tools: '',
+  challenge: '',
+  goal: '',
+  concept: '',
+  deliverables: '',
+  process: '',
+  result: '',
+  testimonial: '',
   featured: false,
 };
 
@@ -267,6 +281,13 @@ export default function Admin() {
       date: p.date ?? '',
       client: p.client ?? '',
       tools: p.tools ?? '',
+      challenge: p.challenge ?? '',
+      goal: p.goal ?? '',
+      concept: p.concept ?? '',
+      deliverables: p.deliverables ?? '',
+      process: p.process ?? '',
+      result: p.result ?? '',
+      testimonial: p.testimonial ?? '',
       featured: p.featured ?? false,
     });
     setPendingImages([]);
@@ -384,6 +405,93 @@ export default function Admin() {
               <Label htmlFor="description">Description</Label>
               <Textarea id="description" rows={4} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
             </div>
+
+            <div className="md:col-span-2 border-t border-border pt-5">
+              <h3 className="text-sm font-medium tracking-[0.2em] uppercase text-muted-foreground">
+                Case Study Fields
+              </h3>
+              <p className="text-xs text-muted-foreground mt-1">
+                Optional fields. Leave empty if this project is only a gallery item.
+              </p>
+            </div>
+
+            <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="challenge">Challenge</Label>
+              <Textarea
+                id="challenge"
+                rows={3}
+                value={form.challenge}
+                onChange={(e) => setForm({ ...form, challenge: e.target.value })}
+                placeholder="What problem or business challenge did this project solve?"
+              />
+            </div>
+
+            <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="goal">Goal</Label>
+              <Textarea
+                id="goal"
+                rows={3}
+                value={form.goal}
+                onChange={(e) => setForm({ ...form, goal: e.target.value })}
+                placeholder="What was the main goal for the brand, client, or campaign?"
+              />
+            </div>
+
+            <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="concept">Concept</Label>
+              <Textarea
+                id="concept"
+                rows={3}
+                value={form.concept}
+                onChange={(e) => setForm({ ...form, concept: e.target.value })}
+                placeholder="What creative direction or concept shaped the project?"
+              />
+            </div>
+
+            <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="deliverables">Deliverables</Label>
+              <Textarea
+                id="deliverables"
+                rows={3}
+                value={form.deliverables}
+                onChange={(e) => setForm({ ...form, deliverables: e.target.value })}
+                placeholder="Logo, identity system, packaging, social templates, brand guidelines..."
+              />
+            </div>
+
+            <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="process">Process</Label>
+              <Textarea
+                id="process"
+                rows={4}
+                value={form.process}
+                onChange={(e) => setForm({ ...form, process: e.target.value })}
+                placeholder="Research, strategy, visual exploration, refinement, final system..."
+              />
+            </div>
+
+            <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="result">Result</Label>
+              <Textarea
+                id="result"
+                rows={3}
+                value={form.result}
+                onChange={(e) => setForm({ ...form, result: e.target.value })}
+                placeholder="What changed after the project? Better positioning, stronger launch, clearer brand..."
+              />
+            </div>
+
+            <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="testimonial">Testimonial</Label>
+              <Textarea
+                id="testimonial"
+                rows={3}
+                value={form.testimonial}
+                onChange={(e) => setForm({ ...form, testimonial: e.target.value })}
+                placeholder="Optional client quote..."
+              />
+            </div>
+
             <div className="md:col-span-2">
               <label className="flex items-center gap-3 cursor-pointer select-none w-fit">
                 <div
