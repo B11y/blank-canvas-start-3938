@@ -122,7 +122,7 @@ export default function Home() {
                 animate={heroTextAnimate}
                 transition={reducedMotion ? { duration: 0 } : { ...heroTextTransition, delay: 0.12 }}
               >
-                {photographerInfo.tagline}
+                Brand Identity & Visual Systems for Bold Businesses
               </motion.p>
 
               <motion.p
@@ -131,8 +131,30 @@ export default function Home() {
                 animate={heroTextAnimate}
                 transition={reducedMotion ? { duration: 0 } : { ...heroTextTransition, delay: 0.18 }}
               >
-                {photographerInfo.heroIntroduction}
+                I help startups, restaurants, fashion brands, and creators build memorable visual systems.
               </motion.p>
+
+              <motion.div
+                className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1, delay: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
+              >
+                <Link
+                  to="/portfolio"
+                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-white px-7 py-3 text-sm font-medium tracking-wide text-black transition-all duration-300 hover:bg-white/90 hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+                >
+                  <span>View Selected Work</span>
+                  <ArrowRight className="size-4" />
+                </Link>
+
+                <Link
+                  to="/contact"
+                  className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/35 px-7 py-3 text-sm font-medium tracking-wide text-white transition-all duration-300 hover:bg-white/10 hover:border-white/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+                >
+                  Start a Project
+                </Link>
+              </motion.div>
             </motion.div>
 
             <motion.div
