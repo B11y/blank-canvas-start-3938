@@ -14,6 +14,13 @@ export interface SupabaseProject {
   date: string;
   client?: string | null;
   tools?: string | null;
+  challenge?: string | null;
+  goal?: string | null;
+  concept?: string | null;
+  deliverables?: string | null;
+  process?: string | null;
+  result?: string | null;
+  testimonial?: string | null;
   featured?: boolean;
   created_at?: string;
 }
