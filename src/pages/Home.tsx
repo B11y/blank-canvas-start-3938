@@ -52,15 +52,15 @@ export default function Home() {
       return () => window.cancelIdleCallback(idleId);
     }
 
-    const timer = window.setTimeout(scheduleVideo, 900);
-    return () => window.clearTimeout(timer);
+    const timer = globalThis.setTimeout(scheduleVideo, 900);
+    return () => globalThis.clearTimeout(timer);
   }, [isDesktop, reducedMotion]);
 
   const heroTextInitial = reducedMotion ? false : { opacity: 0, y: 24 };
   const heroTextAnimate = { opacity: 1, y: 0 };
   const heroTextTransition = reducedMotion
     ? { duration: 0 }
-    : { duration: 0.65, ease: [0.25, 0.46, 0.45, 0.94] };
+    : { duration: 0.65, ease: [0.25, 0.46, 0.45, 0.94] as const };
 
   return (
     <>
@@ -138,7 +138,7 @@ export default function Home() {
                 className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
+                transition={{ duration: 1, delay: 0.9, ease: [0.25, 0.46, 0.45, 0.94] as const }}
               >
                 <Link
                   to="/portfolio"

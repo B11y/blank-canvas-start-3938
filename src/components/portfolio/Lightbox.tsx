@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
@@ -31,6 +31,18 @@ export function Lightbox({
   const currentImage = images[currentIndex];
   const totalImages = images.length;
 
+  const handlePrevious = useCallback(() => {
+    if (currentIndex > 0) {
+      onNavigate(currentIndex - 1);
+    }
+  }, [currentIndex, onNavigate]);
+
+  const handleNext = useCallback(() => {
+    if (currentIndex < totalImages - 1) {
+      onNavigate(currentIndex + 1);
+    }
+  }, [currentIndex, onNavigate, totalImages]);
+
   // Keyboard navigation
   useEffect(() => {
     if (!isOpen) return;
@@ -47,7 +59,7 @@ export function Lightbox({
 
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [isOpen, currentIndex]);
+  }, [handleNext, handlePrevious, isOpen, onClose]);
 
   // Touch gesture handlers
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -73,18 +85,6 @@ export function Lightbox({
 
     setTouchStart(0);
     setTouchEnd(0);
-  };
-
-  const handlePrevious = () => {
-    if (currentIndex > 0) {
-      onNavigate(currentIndex - 1);
-    }
-  };
-
-  const handleNext = () => {
-    if (currentIndex < totalImages - 1) {
-      onNavigate(currentIndex + 1);
-    }
   };
 
   return (

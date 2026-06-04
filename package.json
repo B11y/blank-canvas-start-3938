@@ -8,7 +8,9 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "typecheck": "tsc -b --pretty false",
+    "ci": "npm run typecheck && npm run lint && npm run build"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

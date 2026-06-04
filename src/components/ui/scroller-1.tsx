@@ -270,7 +270,6 @@ export const Scroller = ({
         {items.map((child, index) => (
           <div
             key={index}
-            // @ts-expect-error - callback ref assignment stores nullable elements by index
             ref={(el) => (itemsRef.current[index] = el)}
           >
             {child}

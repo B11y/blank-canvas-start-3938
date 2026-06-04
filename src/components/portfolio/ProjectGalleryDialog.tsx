@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, X, Calendar, Tag } from 'lucide-react';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
@@ -33,8 +33,13 @@ export function ProjectGalleryDialog({ project, open, onClose }: Props) {
     })();
   }, [project, open]);
 
-  const next = () => setIndex((i) => (i + 1) % Math.max(images.length, 1));
-  const prev = () => setIndex((i) => (i - 1 + images.length) % Math.max(images.length, 1));
+  const next = useCallback(() => {
+    setIndex((i) => (i + 1) % Math.max(images.length, 1));
+  }, [images.length]);
+
+  const prev = useCallback(() => {
+    setIndex((i) => (i - 1 + images.length) % Math.max(images.length, 1));
+  }, [images.length]);
 
   useEffect(() => {
     if (!open) return;
@@ -45,7 +50,7 @@ export function ProjectGalleryDialog({ project, open, onClose }: Props) {
     };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
-  }, [open, images.length]);
+  }, [next, onClose, open, prev]);
 
   if (!project) return null;
 
