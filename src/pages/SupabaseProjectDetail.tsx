@@ -73,6 +73,32 @@ export default function SupabaseProjectDetail() {
       })
     : null;
 
+  const caseStudyData = project as SupabaseProject & {
+    challenge?: string | null;
+    goal?: string | null;
+    concept?: string | null;
+    deliverables?: string | null;
+    process?: string | null;
+    result?: string | null;
+    testimonial?: string | null;
+  };
+
+  const caseStudySections = [
+    { label: 'Challenge', value: caseStudyData.challenge },
+    { label: 'Goal', value: caseStudyData.goal },
+    { label: 'Concept', value: caseStudyData.concept },
+    { label: 'Deliverables', value: caseStudyData.deliverables },
+    { label: 'Process', value: caseStudyData.process },
+    { label: 'Result', value: caseStudyData.result },
+  ]
+    .map((section) => ({
+      label: section.label,
+      value: String(section.value ?? '').trim(),
+    }))
+    .filter((section) => section.value.length > 0);
+
+  const testimonial = String(caseStudyData.testimonial ?? '').trim();
+
   return (
     <>
       <SEOHead
@@ -131,6 +157,42 @@ export default function SupabaseProjectDetail() {
             <p className="text-lg md:text-xl font-light leading-relaxed text-foreground whitespace-pre-wrap">
               {project.description}
             </p>
+          )}
+
+          {caseStudySections.length > 0 && (
+            <>
+              <Separator />
+
+              <section className="space-y-8">
+                <div className="space-y-3">
+                  <p className="text-xs font-light tracking-[0.24em] uppercase text-muted-foreground">
+                    Case Study
+                  </p>
+                  <h2 className="text-2xl md:text-3xl font-light tracking-wide">
+                    From challenge to visual system
+                  </h2>
+                </div>
+
+                <div className="grid gap-6 md:grid-cols-2">
+                  {caseStudySections.map((section) => (
+                    <div key={section.label} className="space-y-2 border-t border-border pt-5">
+                      <h3 className="text-sm font-medium tracking-[0.2em] uppercase text-muted-foreground">
+                        {section.label}
+                      </h3>
+                      <p className="text-base font-light leading-relaxed text-foreground whitespace-pre-wrap">
+                        {section.value}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                {testimonial.length > 0 && (
+                  <blockquote className="border-l border-gold pl-6 text-lg md:text-xl font-light leading-relaxed text-foreground">
+                    “{testimonial}”
+                  </blockquote>
+                )}
+              </section>
+            </>
           )}
 
           {rest.length > 0 && (
