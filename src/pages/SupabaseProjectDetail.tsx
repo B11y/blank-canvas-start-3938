@@ -17,7 +17,29 @@ export default function SupabaseProjectDetail() {
   useEffect(() => {
     if (!id) return;
     (async () => {
-      const { data, error } = await supabase.from('projects').select('*').eq('id', id).maybeSingle();
+      const { data, error } = await supabase
+        .from('projects')
+        .select(`
+          id,
+          title,
+          description,
+          image_url,
+          category,
+          date,
+          client,
+          tools,
+          featured,
+          created_at,
+          challenge,
+          goal,
+          concept,
+          deliverables,
+          process,
+          result,
+          testimonial
+        `)
+        .eq('id', id)
+        .maybeSingle();
       if (error || !data) {
         setNotFound(true);
         setLoading(false);
