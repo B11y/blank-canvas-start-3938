@@ -48,10 +48,7 @@ export function Header() {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className={cn(
-                'h-10 w-auto md:h-12 transition-all duration-300',
-                isTransparent && 'brightness-0 invert'
-              )}
+              className="h-10 w-auto md:h-12"
             />
           </Link>
 
