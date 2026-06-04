@@ -5,6 +5,7 @@ import { ArrowLeft } from 'lucide-react';
 import { supabase, type SupabaseProject } from '@/lib/supabase';
 import { SEOHead } from '@/components/seo/SEOHead';
 import { Separator } from '@/components/ui/separator';
+import { getResponsiveImageAttributes } from '@/lib/responsive-image';
 
 export default function SupabaseProjectDetail() {
   const { id } = useParams<{ id: string }>();
@@ -42,19 +43,37 @@ export default function SupabaseProjectDetail() {
   const cover = images[0] || project.image_url;
   const rest = images.slice(1);
 
+  const coverImageAttributes = cover
+    ? getResponsiveImageAttributes(cover, {
+        width: 1600,
+        height: 1000,
+        sizes: '100vw',
+      })
+    : null;
+
   return (
     <>
       <SEOHead title={project.title} description={project.description} image={cover} type="article" />
       <article className="min-h-screen">
-        {/* 1. Full-width cover image */}
-        {cover && (
+        {coverImageAttributes && (
           <motion.div
             className="w-full h-[60vh] md:h-[80vh] overflow-hidden bg-muted"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8 }}
           >
-            <img src={cover} alt={project.title} className="w-full h-full object-cover" loading="eager" />
+            <img
+              src={coverImageAttributes.src}
+              srcSet={coverImageAttributes.srcSet}
+              sizes={coverImageAttributes.sizes}
+              width={coverImageAttributes.width}
+              height={coverImageAttributes.height}
+              alt={project.title}
+              className="w-full h-full object-cover"
+              loading="eager"
+              fetchPriority="high"
+              decoding="sync"
+            />
           </motion.div>
         )}
 
@@ -63,7 +82,6 @@ export default function SupabaseProjectDetail() {
             <ArrowLeft className="size-4" /> Back to portfolio
           </Link>
 
-          {/* 2. Title, date, category */}
           <motion.header
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -80,47 +98,52 @@ export default function SupabaseProjectDetail() {
 
           <Separator />
 
-          {/* 3. Full description */}
           {project.description && (
             <p className="text-lg md:text-xl font-light leading-relaxed text-foreground whitespace-pre-wrap">
               {project.description}
             </p>
           )}
 
-          {/* Additional gallery images */}
           {rest.length > 0 && (
             <div className="space-y-6 -mx-6 lg:-mx-8">
-              {rest.map((url, i) => (
-                <motion.img
-                  key={i}
-                  src={url}
-                  alt={`${project.title} ${i + 2}`}
-                  className="w-full h-auto"
-                  loading="lazy"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-100px' }}
-                  transition={{ duration: 0.6 }}
-                />
-              ))}
+              {rest.map((url, i) => {
+                const imageAttributes = getResponsiveImageAttributes(url, {
+                  width: 1600,
+                  height: 1000,
+                  sizes: '(min-width: 1024px) 896px, 100vw',
+                });
+                return (
+                  <motion.img
+                    key={i}
+                    src={imageAttributes.src}
+                    srcSet={imageAttributes.srcSet}
+                    sizes={imageAttributes.sizes}
+                    width={imageAttributes.width}
+                    height={imageAttributes.height}
+                    alt={`${project.title} ${i + 2}`}
+                    className="w-full h-auto"
+                    loading="lazy"
+                    decoding="async"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-100px' }}
+                    transition={{ duration: 0.6 }}
+                  />
+                );
+              })}
             </div>
           )}
 
           <Separator />
 
-          {/* 4. Details: TOOLS + CLIENT */}
           <section className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
             <div className="space-y-2">
               <h2 className="text-xs font-medium tracking-[0.2em] uppercase text-muted-foreground">Tools</h2>
-              <p className="text-base md:text-lg font-light text-foreground">
-                {project.tools || '—'}
-              </p>
+              <p className="text-base md:text-lg font-light text-foreground">{project.tools || '—'}</p>
             </div>
             <div className="space-y-2">
               <h2 className="text-xs font-medium tracking-[0.2em] uppercase text-muted-foreground">Client</h2>
-              <p className="text-base md:text-lg font-light text-foreground">
-                {project.client || '—'}
-              </p>
+              <p className="text-base md:text-lg font-light text-foreground">{project.client || '—'}</p>
             </div>
           </section>
         </div>

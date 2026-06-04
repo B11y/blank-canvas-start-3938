@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { supabase, type SupabaseProject } from '@/lib/supabase';
-import { optimizeImage } from '@/lib/cloudinary';
+import { getResponsiveImageAttributes } from '@/lib/responsive-image';
 
 export function FeaturedProjectsSection() {
   const [projects, setProjects] = useState<SupabaseProject[]>([]);
@@ -30,33 +30,50 @@ export function FeaturedProjectsSection() {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
-      {projects.map((project, i) => (
-        <motion.article
-          key={project.id}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: i * 0.1 }}
-          className="group relative overflow-hidden bg-muted"
-        >
-          <Link to={`/projects/${project.id}`} className="block aspect-[16/10] overflow-hidden">
-            {project.image_url ? (
-              <img
-                src={optimizeImage(project.image_url)}
-                alt={project.title}
-                loading="lazy"
-                className="w-full h-full object-cover transition-transform duration-700 md:group-hover:scale-105"
-              />
-            ) : (
-              <div className="w-full h-full bg-muted" />
-            )}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-500" />
-            <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-0 opacity-100 md:translate-y-4 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 transition-all duration-500">
-              <p className="text-xs uppercase tracking-widest text-white/70 mb-1">{project.category}</p>
-              <h3 className="text-xl font-medium text-white">{project.title}</h3>
-            </div>
-          </Link>
-        </motion.article>
-      ))}
+      {projects.map((project, i) => {
+        const priority = i === 0;
+        const imageAttributes = project.image_url
+          ? getResponsiveImageAttributes(project.image_url, {
+              width: 1200,
+              height: 750,
+              sizes: '(min-width: 768px) 50vw, 100vw',
+            })
+          : null;
+
+        return (
+          <motion.article
+            key={project.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: i * 0.1 }}
+            className="group relative overflow-hidden bg-muted"
+          >
+            <Link to={`/projects/${project.id}`} className="block aspect-[16/10] overflow-hidden">
+              {imageAttributes ? (
+                <img
+                  src={imageAttributes.src}
+                  srcSet={imageAttributes.srcSet}
+                  sizes={imageAttributes.sizes}
+                  width={imageAttributes.width}
+                  height={imageAttributes.height}
+                  alt={project.title}
+                  loading={priority ? 'eager' : 'lazy'}
+                  fetchPriority={priority ? 'high' : 'auto'}
+                  decoding={priority ? 'sync' : 'async'}
+                  className="w-full h-full object-cover transition-transform duration-700 md:group-hover:scale-105"
+                />
+              ) : (
+                <div className="w-full h-full bg-muted" />
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-0 opacity-100 md:translate-y-4 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 transition-all duration-500">
+                <p className="text-xs uppercase tracking-widest text-white/70 mb-1">{project.category}</p>
+                <h3 className="text-xl font-medium text-white">{project.title}</h3>
+              </div>
+            </Link>
+          </motion.article>
+        );
+      })}
     </div>
   );
 }

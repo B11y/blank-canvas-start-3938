@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import type { ProjectImage } from '@/types';
 import { cn } from '@/lib/utils';
+import { getResponsiveImageAttributes } from '@/lib/responsive-image';
 
 interface ImageWithLightboxProps {
   image: ProjectImage;
@@ -11,10 +12,6 @@ interface ImageWithLightboxProps {
   index?: number;
 }
 
-/**
- * Image component with lazy loading, blur placeholder, and lightbox trigger
- * Optimized for performance with progressive loading
- */
 export function ImageWithLightbox({ 
   image, 
   onClick, 
@@ -31,6 +28,12 @@ export function ImageWithLightbox({
     square: 'aspect-square'
   };
 
+  const imageAttributes = getResponsiveImageAttributes(image.src, {
+    width: 1600,
+    height: 1000,
+    sizes: '(min-width: 1024px) 50vw, 100vw',
+  });
+
   return (
     <motion.div
       className={cn('relative overflow-hidden rounded-sm cursor-pointer group', className)}
@@ -43,14 +46,16 @@ export function ImageWithLightbox({
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className={cn('relative bg-muted', aspectRatioClasses[image.aspectRatio])}>
-        {/* Loading placeholder */}
         {!isLoaded && (
           <div className="absolute inset-0 bg-muted" />
         )}
 
-        {/* Actual image */}
         <img
-          src={image.src}
+          src={imageAttributes.src}
+          srcSet={imageAttributes.srcSet}
+          sizes={imageAttributes.sizes}
+          width={imageAttributes.width}
+          height={imageAttributes.height}
           alt={image.alt}
           className={cn(
             'absolute inset-0 w-full h-full object-cover transition-all duration-700',
@@ -58,10 +63,11 @@ export function ImageWithLightbox({
             isHovered && 'scale-105'
           )}
           loading={priority ? 'eager' : 'lazy'}
+          fetchPriority={priority ? 'high' : 'auto'}
+          decoding={priority ? 'sync' : 'async'}
           onLoad={() => setIsLoaded(true)}
         />
 
-        {/* Hover overlay */}
         <motion.div
           className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500"
           initial={false}
@@ -70,25 +76,12 @@ export function ImageWithLightbox({
           <div className="absolute inset-0 flex items-center justify-center">
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ 
-                scale: isHovered ? 1 : 0.8, 
-                opacity: isHovered ? 1 : 0 
-              }}
+              animate={{ scale: isHovered ? 1 : 0.8, opacity: isHovered ? 1 : 0 }}
               transition={{ duration: 0.3 }}
               className="size-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center"
             >
-              <svg
-                className="size-6 text-white"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"
-                />
+              <svg className="size-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
               </svg>
             </motion.div>
           </div>
