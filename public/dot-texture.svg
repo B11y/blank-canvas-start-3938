@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" fill="none">
+  <rect width="120" height="120" fill="transparent"/>
+  <g fill="#D68A4E" fill-opacity="0.14">
+    <circle cx="10" cy="10" r="1"/>
+    <circle cx="50" cy="10" r="1"/>
+    <circle cx="90" cy="10" r="1"/>
+    <circle cx="30" cy="30" r="1"/>
+    <circle cx="70" cy="30" r="1"/>
+    <circle cx="110" cy="30" r="1"/>
+    <circle cx="10" cy="50" r="1"/>
+    <circle cx="50" cy="50" r="1"/>
+    <circle cx="90" cy="50" r="1"/>
+    <circle cx="30" cy="70" r="1"/>
+    <circle cx="70" cy="70" r="1"/>
+    <circle cx="110" cy="70" r="1"/>
+    <circle cx="10" cy="90" r="1"/>
+    <circle cx="50" cy="90" r="1"/>
+    <circle cx="90" cy="90" r="1"/>
+    <circle cx="30" cy="110" r="1"/>
+    <circle cx="70" cy="110" r="1"/>
+    <circle cx="110" cy="110" r="1"/>
+  </g>
+</svg>
