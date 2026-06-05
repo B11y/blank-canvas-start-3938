@@ -83,5 +83,5 @@ Whether it's a logo, a packaging system, or a social campaign, I aim to create w
     whatsapp: 'https://wa.me/201000135225'
   },
   // Photo by Joshua Sun on Unsplash
-  portraitImage: 'https://images.unsplash.com/photo-1585279968680-6606ee6ed134?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MDA2OTF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjI3Njk1NjB8&ixlib=rb-4.1.0&q=80&w=1080'
+  portraitImage: 'https://res.cloudinary.com/dzmvwrsp4/image/upload/f_auto,q_auto,w_1080/About_ukfym7'
 };
