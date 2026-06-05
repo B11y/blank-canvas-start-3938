@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { supabase, type SupabaseProject } from '@/lib/supabase';
-import { optimizeImage } from '@/lib/cloudinary';
+import { getResponsiveImageAttributes } from '@/lib/cloudinary';
 
 export function SupabaseProjectsSection() {
   const [projects, setProjects] = useState<SupabaseProject[]>([]);
@@ -16,11 +16,13 @@ export function SupabaseProjectsSection() {
         .from('projects')
         .select('*')
         .order('date', { ascending: false });
+
       if (error) {
         setError(error.message);
         setLoading(false);
         return;
       }
+
       const list = data ?? [];
       setProjects(list);
 
@@ -28,20 +30,35 @@ export function SupabaseProjectsSection() {
         const { data: imgs } = await supabase
           .from('project_images')
           .select('project_id, image_url, sort_order')
-          .in('project_id', list.map((p) => p.id))
+          .in(
+            'project_id',
+            list.map((project) => project.id),
+          )
           .order('sort_order', { ascending: true });
+
         const map: Record<string, string> = {};
+
         (imgs ?? []).forEach((img: { project_id: string; image_url: string }) => {
-          if (!map[img.project_id]) map[img.project_id] = img.image_url;
+          if (!map[img.project_id]) {
+            map[img.project_id] = img.image_url;
+          }
         });
+
         setThumbs(map);
       }
+
       setLoading(false);
     })();
   }, []);
 
-  if (loading) return <div className="text-center py-16 text-muted-foreground">Loading projects…</div>;
-  if (error) return <div className="text-center py-16 text-destructive">Couldn't load projects: {error}</div>;
+  if (loading) {
+    return <div className="text-center py-16 text-muted-foreground">Loading projects…</div>;
+  }
+
+  if (error) {
+    return <div className="text-center py-16 text-destructive">Couldn't load projects: {error}</div>;
+  }
+
   if (projects.length === 0) {
     return (
       <div className="text-center py-16 text-muted-foreground">
@@ -52,28 +69,38 @@ export function SupabaseProjectsSection() {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto px-6">
-      {projects.map((project, i) => {
-        const thumb = optimizeImage(thumbs[project.id] || project.image_url);
+      {projects.map((project, index) => {
+        const thumbUrl = thumbs[project.id] || project.image_url;
+        const thumbAttributes = getResponsiveImageAttributes(thumbUrl, {
+          width: 900,
+          height: 675,
+          sizes: '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw',
+          widths: [480, 768, 900, 1200],
+        });
+
         return (
           <motion.article
             key={project.id}
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: i * 0.08 }}
+            transition={{ duration: 0.6, delay: index * 0.08 }}
             className="group overflow-hidden rounded-lg border border-border/50 bg-card hover:border-gold/40 transition-colors duration-500"
             style={{ willChange: 'transform' }}
           >
             <Link to={`/projects/${project.id}`} className="block">
-
               {/* Image Container */}
-              {thumb && (
+              {thumbAttributes.src && (
                 <div className="aspect-[4/3] overflow-hidden bg-muted relative">
-
                   {/* Grayscale → Color + Zoom */}
                   <img
-                    src={thumb}
+                    src={thumbAttributes.src}
+                    srcSet={thumbAttributes.srcSet}
+                    sizes={thumbAttributes.sizes}
+                    width={thumbAttributes.width}
+                    height={thumbAttributes.height}
                     alt={project.title}
                     loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover transition-all duration-700 ease-out group-hover:scale-105 grayscale group-hover:grayscale-0"
                   />
 
@@ -86,7 +113,6 @@ export function SupabaseProjectsSection() {
                       View Project
                     </span>
                   </div>
-
                 </div>
               )}
 
@@ -96,10 +122,11 @@ export function SupabaseProjectsSection() {
                   <span className="transition-colors duration-300 group-hover:text-gold">{project.category}</span>
                   <time>{project.date}</time>
                 </div>
-                <h3 className="text-xl font-medium transition-colors duration-300 group-hover:text-gold">{project.title}</h3>
+                <h3 className="text-xl font-medium transition-colors duration-300 group-hover:text-gold">
+                  {project.title}
+                </h3>
                 <p className="text-sm text-muted-foreground line-clamp-3">{project.description}</p>
               </div>
-
             </Link>
           </motion.article>
         );
