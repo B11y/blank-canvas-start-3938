@@ -8,6 +8,7 @@ import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { getProjectBySlug } from '@/data/projects';
 import { ImageWithLightbox } from '@/components/portfolio/ImageWithLightbox';
 import { Lightbox } from '@/components/portfolio/Lightbox';
+import { getResponsiveImageAttributes } from '@/lib/responsive-image';
 
 /**
  * Project detail page with hero image, gallery, and full-screen lightbox
@@ -33,6 +34,12 @@ export default function ProjectDetail() {
   const closeLightbox = () => {
     setLightboxOpen(false);
   };
+
+  const coverImageAttributes = getResponsiveImageAttributes(project.coverImage, {
+    width: 1600,
+    height: 1000,
+    sizes: '100vw',
+  });
 
   const caseStudyData = project as typeof project & {
     challenge?: string;
@@ -71,11 +78,16 @@ export default function ProjectDetail() {
         transition={{ duration: 0.8 }}
       >
         <img
-          src={project.coverImage}
+          src={coverImageAttributes.src}
+          srcSet={coverImageAttributes.srcSet}
+          sizes={coverImageAttributes.sizes}
+          width={coverImageAttributes.width}
+          height={coverImageAttributes.height}
           alt={project.title}
           className="w-full h-full object-cover"
           loading="eager"
           fetchPriority="high"
+          decoding="sync"
         />
         {/* Gradient overlay for depth */}
         <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
@@ -210,7 +222,7 @@ export default function ProjectDetail() {
                   image={image}
                   onClick={() => openLightbox(index)}
                   priority={index === 0}
-                  index={0}
+                  index={index}
                   className="w-full"
                 />
               </ScrollReveal>
