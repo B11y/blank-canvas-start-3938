@@ -105,6 +105,7 @@ export default function SupabaseProjectDetail() {
         title={project.title}
         description={project.description}
         image={cover}
+        imageAlt={`${project.title} project cover image`}
         type="article"
         publishedTime={project.created_at || project.date}
         modifiedTime={project.created_at || project.date}

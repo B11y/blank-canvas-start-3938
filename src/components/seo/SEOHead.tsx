@@ -9,6 +9,7 @@ interface SEOHeadProps {
   title?: string;
   description?: string;
   image?: string;
+  imageAlt?: string;
   type?: SEOType;
   locale?: Locale;
   publishedTime?: string;
@@ -74,6 +75,7 @@ export function SEOHead({
   title,
   description,
   image = DEFAULT_IMAGE,
+  imageAlt,
   type = 'website',
   locale = 'en',
   publishedTime,
@@ -89,6 +91,7 @@ export function SEOHead({
     const fullTitle = buildTitle(title);
     const fullDescription = description || photographerInfo.heroIntroduction || DEFAULT_DESCRIPTION;
     const pageImage = image || DEFAULT_IMAGE;
+    const pageImageAlt = imageAlt || fullTitle;
     const isArabic = locale === 'ar';
     return {
       baseUrl,
@@ -96,11 +99,12 @@ export function SEOHead({
       fullTitle,
       fullDescription,
       pageImage,
+      pageImageAlt,
       htmlLang: isArabic ? 'ar' : 'en',
       htmlDir: isArabic ? 'rtl' : 'ltr',
       ogLocale: isArabic ? 'ar_EG' : 'en_US',
     };
-  }, [canonicalPath, description, image, locale, location.pathname, title]);
+  }, [canonicalPath, description, image, imageAlt, locale, location.pathname, title]);
 
   useEffect(() => {
     document.title = seo.fullTitle;
@@ -122,7 +126,7 @@ export function SEOHead({
     upsertMeta('property', 'og:type', type);
     upsertMeta('property', 'og:url', seo.canonicalUrl);
     upsertMeta('property', 'og:image', seo.pageImage);
-    upsertMeta('property', 'og:image:alt', seo.fullTitle);
+    upsertMeta('property', 'og:image:alt', seo.pageImageAlt);
     upsertMeta('property', 'og:site_name', SITE_NAME);
     upsertMeta('property', 'og:locale', seo.ogLocale);
 
@@ -136,7 +140,7 @@ export function SEOHead({
     upsertMeta('name', 'twitter:title', seo.fullTitle);
     upsertMeta('name', 'twitter:description', seo.fullDescription);
     upsertMeta('name', 'twitter:image', seo.pageImage);
-    upsertMeta('name', 'twitter:image:alt', seo.fullTitle);
+    upsertMeta('name', 'twitter:image:alt', seo.pageImageAlt);
 
     upsertJsonLd('person-schema', {
       '@context': 'https://schema.org',
@@ -179,6 +183,39 @@ export function SEOHead({
       serviceType: ['Brand Identity Design','Logo Design','Social Media Design','Packaging Design','Visual Identity Design'],
     });
 
+    upsertJsonLd('image-object-schema', {
+      '@context': 'https://schema.org',
+      '@type': 'ImageObject',
+      '@id': `${seo.canonicalUrl}#primaryimage`,
+      url: seo.pageImage,
+      contentUrl: seo.pageImage,
+      caption: seo.pageImageAlt,
+      representativeOfPage: true,
+    });
+
+    const breadcrumbItems = [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: `${seo.baseUrl}/`,
+      },
+      ...(location.pathname === '/'
+        ? []
+        : [{
+            '@type': 'ListItem',
+            position: 2,
+            name: title || SITE_NAME,
+            item: seo.canonicalUrl,
+          }]),
+    ];
+
+    upsertJsonLd('breadcrumb-schema', {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: breadcrumbItems,
+    });
+
     if (type === 'article') {
       upsertJsonLd('creative-work-schema', {
         '@context': 'https://schema.org',
@@ -186,8 +223,11 @@ export function SEOHead({
         headline: seo.fullTitle,
         name: title || seo.fullTitle,
         description: seo.fullDescription,
-        image: seo.pageImage,
+        image: { '@id': `${seo.canonicalUrl}#primaryimage` },
+        thumbnailUrl: seo.pageImage,
         url: seo.canonicalUrl,
+        mainEntityOfPage: seo.canonicalUrl,
+        isPartOf: { '@id': `${seo.baseUrl}/#professional-service` },
         author: { '@id': `${seo.baseUrl}/#person` },
         creator: { '@id': `${seo.baseUrl}/#person` },
         publisher: { '@id': `${seo.baseUrl}/#organization` },

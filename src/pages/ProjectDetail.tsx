@@ -66,6 +66,7 @@ export default function ProjectDetail() {
         title={project.title}
         description={project.description}
         image={project.coverImage}
+        imageAlt={`${project.title} project cover image`}
         type="article"
       />
       
