@@ -71,7 +71,7 @@ export default function Home() {
         <section ref={heroRef} className="relative min-h-[100svh] w-full overflow-hidden">
           <div className="absolute inset-0 bg-black" />
 
-          <div className="relative min-h-[100svh] flex flex-col items-center justify-end pb-24 px-6">
+          <div className="relative min-h-[100svh] flex flex-col items-center justify-end pb-40 px-6">
             <motion.div
               className="text-center space-y-6 max-w-4xl"
               initial={heroTextInitial}
