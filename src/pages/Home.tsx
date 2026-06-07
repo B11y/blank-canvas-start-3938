@@ -116,14 +116,6 @@ export default function Home() {
                 {photographerInfo.name.toUpperCase()}
               </motion.h1>
               
-              <motion.p
-                className="text-xl md:text-2xl font-light tracking-wide text-white/90"
-                initial={heroTextInitial}
-                animate={heroTextAnimate}
-                transition={reducedMotion ? { duration: 0 } : { ...heroTextTransition, delay: 0.12 }}
-              >
-                Brand Identity & Visual Systems for Bold Businesses
-              </motion.p>
 
 
               <motion.div
