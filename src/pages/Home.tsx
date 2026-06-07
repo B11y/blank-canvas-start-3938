@@ -125,14 +125,6 @@ export default function Home() {
                 Brand Identity & Visual Systems for Bold Businesses
               </motion.p>
 
-              <motion.p
-                className="text-base md:text-lg font-light leading-relaxed text-white/80 max-w-2xl mx-auto"
-                initial={heroTextInitial}
-                animate={heroTextAnimate}
-                transition={reducedMotion ? { duration: 0 } : { ...heroTextTransition, delay: 0.18 }}
-              >
-                I help startups, restaurants, fashion brands, and creators build memorable visual systems.
-              </motion.p>
 
               <motion.div
                 className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4"
