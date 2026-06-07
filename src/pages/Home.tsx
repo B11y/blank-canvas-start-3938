@@ -69,52 +69,16 @@ export default function Home() {
       <div className="min-h-screen">
         {/* Hero Section */}
         <section ref={heroRef} className="relative min-h-[100svh] w-full overflow-hidden">
-          <motion.div
-            className="absolute inset-0"
-            style={{ y: videoY }}
-          >
-            <img
-              src={heroPoster}
-              alt=""
-              fetchPriority="high"
-              className="absolute inset-0 w-full h-full object-cover scale-105"
-            />
+          <div className="absolute inset-0 bg-black" />
 
-            {showHeroVideo && (
-              <video
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="none"
-                poster={heroPoster}
-                className="absolute inset-0 w-full h-full object-cover scale-105"
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                }}
-              >
-                <source src={heroVideo} type="video/mp4" />
-              </video>
-            )}
-
-            <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/60" />
-          </motion.div>
-
-          <div className="relative min-h-[100svh] flex flex-col items-center justify-center px-6">
+          <div className="relative min-h-[100svh] flex flex-col items-center justify-end pb-24 px-6">
             <motion.div
               className="text-center space-y-6 max-w-4xl"
               initial={heroTextInitial}
               animate={heroTextAnimate}
               transition={heroTextTransition}
             >
-              <motion.h1
-                className="text-4xl sm:text-5xl md:text-8xl lg:text-9xl font-extralight tracking-widest text-white"
-                initial={heroTextInitial}
-                animate={heroTextAnimate}
-                transition={heroTextTransition}
-              >
-                {photographerInfo.name.toUpperCase()}
-              </motion.h1>
+
               
 
 
