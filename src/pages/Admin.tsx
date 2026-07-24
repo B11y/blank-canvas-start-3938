@@ -26,6 +26,7 @@ type FormState = {
   process: string;
   result: string;
   testimonial: string;
+  video_url: string;
   featured: boolean;
 };
 
@@ -44,6 +45,7 @@ const emptyForm: FormState = {
   process: '',
   result: '',
   testimonial: '',
+  video_url: '',
   featured: false,
 };
 
@@ -288,6 +290,7 @@ export default function Admin() {
       process: p.process ?? '',
       result: p.result ?? '',
       testimonial: p.testimonial ?? '',
+      video_url: p.video_url ?? '',
       featured: p.featured ?? false,
     });
     setPendingImages([]);
@@ -490,6 +493,18 @@ export default function Admin() {
                 onChange={(e) => setForm({ ...form, testimonial: e.target.value })}
                 placeholder="Optional client quote..."
               />
+            </div>
+
+            <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="video_url">Video URL (Cloudinary)</Label>
+              <Input
+                id="video_url"
+                type="url"
+                value={form.video_url}
+                onChange={(e) => setForm({ ...form, video_url: e.target.value })}
+                placeholder="https://res.cloudinary.com/..."
+              />
+              <p className="text-xs text-muted-foreground">اختياري — بيظهر جوا صفحة المشروع</p>
             </div>
 
             <div className="md:col-span-2">

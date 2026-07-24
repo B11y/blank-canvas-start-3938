@@ -21,6 +21,7 @@ export interface SupabaseProject {
   process?: string | null;
   result?: string | null;
   testimonial?: string | null;
+  video_url?: string | null;
   featured?: boolean;
   created_at?: string;
 }

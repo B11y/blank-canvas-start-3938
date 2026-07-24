@@ -36,7 +36,8 @@ export default function SupabaseProjectDetail() {
           deliverables,
           process,
           result,
-          testimonial
+          testimonial,
+          video_url
         `)
         .eq('id', id)
         .maybeSingle();
@@ -81,6 +82,7 @@ export default function SupabaseProjectDetail() {
     process?: string | null;
     result?: string | null;
     testimonial?: string | null;
+    video_url?: string | null;
   };
 
   const caseStudySections = [
@@ -158,6 +160,18 @@ export default function SupabaseProjectDetail() {
             <p className="text-lg md:text-xl font-light leading-relaxed text-foreground whitespace-pre-wrap">
               {project.description}
             </p>
+          )}
+
+          {caseStudyData.video_url && (
+            <div className="w-full rounded-lg overflow-hidden bg-black aspect-video">
+              <video
+                src={caseStudyData.video_url}
+                controls
+                playsInline
+                className="w-full h-full object-contain"
+                preload="metadata"
+              />
+            </div>
           )}
 
           {caseStudySections.length > 0 && (
