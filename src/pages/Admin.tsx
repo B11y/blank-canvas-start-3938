@@ -11,6 +11,11 @@ import { Pencil, Trash2, LogOut, Plus, X, ImagePlus, ArrowUp, ArrowDown, Star } 
 
 type AuthStatus = 'checking' | 'signed-out' | 'unauthorized' | 'authorized';
 
+const isVideoUrl = (url: string) => {
+  const normalized = url.toLowerCase().split('?')[0];
+  return /\.(mp4|webm|ogg|mov|m4v)$/.test(normalized) || normalized.includes('/video/upload/');
+};
+
 type FormState = {
   title: string;
   description: string;
@@ -26,7 +31,6 @@ type FormState = {
   process: string;
   result: string;
   testimonial: string;
-  video_url: string;
   featured: boolean;
 };
 
@@ -45,7 +49,6 @@ const emptyForm: FormState = {
   process: '',
   result: '',
   testimonial: '',
-  video_url: '',
   featured: false,
 };
 
@@ -290,7 +293,6 @@ export default function Admin() {
       process: p.process ?? '',
       result: p.result ?? '',
       testimonial: p.testimonial ?? '',
-      video_url: p.video_url ?? '',
       featured: p.featured ?? false,
     });
     setPendingImages([]);
@@ -523,15 +525,15 @@ export default function Admin() {
             </div>
           </div>
 
-          {/* Gallery images manager */}
+          {/* Gallery media manager */}
           <div className="space-y-3 pt-2 border-t border-border">
             <Label className="flex items-center gap-2">
-              <ImagePlus className="w-4 h-4" /> Gallery images
+              <ImagePlus className="w-4 h-4" /> Gallery media
             </Label>
             <div className="flex gap-2">
               <Input
                 type="url"
-                placeholder="https://image-url.jpg"
+                placeholder="https://image-or-video-url.jpg / .mp4"
                 value={newImageUrl}
                 onChange={(e) => setNewImageUrl(e.target.value)}
                 onKeyDown={(e) => {
@@ -548,7 +550,11 @@ export default function Admin() {
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                 {images.map((img, i) => (
                   <div key={img.id} className="relative group border border-border rounded overflow-hidden bg-muted">
-                    <img src={img.image_url} alt="" className="w-full h-28 object-cover" />
+                    {isVideoUrl(img.image_url) ? (
+                      <video src={img.image_url} className="w-full h-28 object-cover" muted preload="metadata" />
+                    ) : (
+                      <img src={img.image_url} alt="" className="w-full h-28 object-cover" />
+                    )}
                     <div className="absolute top-1 right-1 flex gap-1 opacity-0 group-hover:opacity-100 transition">
                       <button type="button" onClick={() => moveImage(img, -1)} disabled={i === 0}
                         className="bg-black/60 text-white rounded p-1 disabled:opacity-30">
@@ -572,7 +578,11 @@ export default function Admin() {
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                 {pendingImages.map((url, i) => (
                   <div key={i} className="relative group border border-border rounded overflow-hidden bg-muted">
-                    <img src={url} alt="" className="w-full h-28 object-cover" />
+                    {isVideoUrl(url) ? (
+                      <video src={url} className="w-full h-28 object-cover" muted preload="metadata" />
+                    ) : (
+                      <img src={url} alt="" className="w-full h-28 object-cover" />
+                    )}
                     <button type="button" onClick={() => removePendingImage(i)}
                       className="absolute top-1 right-1 bg-black/60 text-white rounded p-1 opacity-0 group-hover:opacity-100 transition">
                       <X className="w-3 h-3" />
@@ -583,7 +593,7 @@ export default function Admin() {
             )}
 
             {editingId && images.length === 0 && (
-              <p className="text-xs text-muted-foreground">No gallery images yet. Add some above.</p>
+              <p className="text-xs text-muted-foreground">No gallery media yet. Add images or videos above.</p>
             )}
           </div>
 

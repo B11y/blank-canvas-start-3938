@@ -7,10 +7,15 @@ import { SEOHead } from '@/components/seo/SEOHead';
 import { Separator } from '@/components/ui/separator';
 import { getResponsiveImageAttributes } from '@/lib/responsive-image';
 
+const isVideoUrl = (url: string) => {
+  const normalized = url.toLowerCase().split('?')[0];
+  return /\.(mp4|webm|ogg|mov|m4v)$/.test(normalized) || normalized.includes('/video/upload/');
+};
+
 export default function SupabaseProjectDetail() {
   const { id } = useParams<{ id: string }>();
   const [project, setProject] = useState<SupabaseProject | null>(null);
-  const [images, setImages] = useState<string[]>([]);
+  const [media, setMedia] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
 
@@ -36,8 +41,7 @@ export default function SupabaseProjectDetail() {
           deliverables,
           process,
           result,
-          testimonial,
-          video_url
+          testimonial
         `)
         .eq('id', id)
         .maybeSingle();
@@ -53,7 +57,7 @@ export default function SupabaseProjectDetail() {
         .eq('project_id', id)
         .order('sort_order', { ascending: true });
       const urls = (imgs ?? []).map((r: { image_url: string }) => r.image_url).filter(Boolean);
-      setImages(urls.length ? urls : data.image_url ? [data.image_url] : []);
+      setMedia(urls);
       setLoading(false);
     })();
   }, [id]);
@@ -63,8 +67,9 @@ export default function SupabaseProjectDetail() {
     return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading…</div>;
   }
 
-  const cover = images[0] || project.image_url;
-  const rest = images.slice(1);
+  const firstImageIndex = media.findIndex((url) => !isVideoUrl(url));
+  const cover = project.image_url || (firstImageIndex >= 0 ? media[firstImageIndex] : '');
+  const galleryMedia = media.filter((_, index) => !(project.image_url.length === 0 && index === firstImageIndex));
 
   const coverImageAttributes = cover
     ? getResponsiveImageAttributes(cover, {
@@ -82,7 +87,6 @@ export default function SupabaseProjectDetail() {
     process?: string | null;
     result?: string | null;
     testimonial?: string | null;
-    video_url?: string | null;
   };
 
   const caseStudySections = [
@@ -210,9 +214,27 @@ export default function SupabaseProjectDetail() {
             </>
           )}
 
-          {rest.length > 0 && (
+          {galleryMedia.length > 0 && (
             <div className="space-y-6 -mx-6 lg:-mx-8">
-              {rest.map((url, i) => {
+              {galleryMedia.map((url, i) => {
+                if (isVideoUrl(url)) {
+                  return (
+                    <motion.video
+                      key={i}
+                      src={url}
+                      controls
+                      className="w-full h-auto rounded-sm border border-border bg-black"
+                      preload="metadata"
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: '-100px' }}
+                      transition={{ duration: 0.6 }}
+                    >
+                      Your browser does not support the video tag.
+                    </motion.video>
+                  );
+                }
+
                 const imageAttributes = getResponsiveImageAttributes(url, {
                   width: 1600,
                   height: 1000,
@@ -226,7 +248,7 @@ export default function SupabaseProjectDetail() {
                     sizes={imageAttributes.sizes}
                     width={imageAttributes.width}
                     height={imageAttributes.height}
-                    alt={`${project.title} ${i + 2}`}
+                    alt={`${project.title} ${i + 1}`}
                     className="w-full h-auto"
                     loading="lazy"
                     decoding="async"
