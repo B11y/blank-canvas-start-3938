@@ -20,6 +20,7 @@ type FormState = {
   title: string;
   description: string;
   image_url: string;
+  video_url: string;
   category: string;
   date: string;
   client: string;
@@ -38,6 +39,7 @@ const emptyForm: FormState = {
   title: '',
   description: '',
   image_url: '',
+  video_url: '',
   category: '',
   date: new Date().toISOString().slice(0, 10),
   client: '',
@@ -282,6 +284,7 @@ export default function Admin() {
       title: p.title ?? '',
       description: p.description ?? '',
       image_url: p.image_url ?? '',
+      video_url: p.video_url ?? '',
       category: p.category ?? '',
       date: p.date ?? '',
       client: p.client ?? '',

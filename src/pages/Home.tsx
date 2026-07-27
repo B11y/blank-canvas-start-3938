@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { photographerInfo } from '@/data/photographer';
 import { FeaturedProjectsSection } from '@/components/portfolio/FeaturedProjectsSection';
@@ -8,52 +8,59 @@ import { MagneticButton } from '@/components/ui/MagneticButton';
 import { SEOHead } from '@/components/seo/SEOHead';
 import { ArrowRight } from 'lucide-react';
 import Marquee from '@/components/Marquee';
+import HeroTunnel from '@/components/HeroTunnel';
 import { Link } from 'react-router-dom';
+import { supabase } from '@/lib/supabase';
 import { useDesktop } from '@/hooks/useDesktop';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 
-const heroPoster =
-  'https://images.pexels.com/videos/2675516/free-video-2675516.jpg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200';
-
-const heroVideo =
-  'https://videos.pexels.com/video-files/2675516/2675516-sd_960_540_24fps.mp4';
-
 export default function Home() {
-  const heroRef = useRef(null);
+  const heroRef = useRef<HTMLElement | null>(null);
   const isDesktop = useDesktop(1024);
   const reducedMotion = useReducedMotion();
-  const [showHeroVideo, setShowHeroVideo] = useState(false);
-  const { scrollYProgress } = useScroll({
+  const [tunnelImages, setTunnelImages] = useState<string[]>([]);
+
+  useScroll({
     target: heroRef,
     offset: ['start start', 'end start'],
   });
-  const videoY = useTransform(scrollYProgress, [0, 1], ['0%', reducedMotion ? '0%' : '20%']);
 
   useEffect(() => {
     if (!isDesktop || reducedMotion) {
-      setShowHeroVideo(false);
+      setTunnelImages([]);
       return;
     }
 
-    const canUseConnection =
-      typeof navigator === 'undefined' ||
-      !('connection' in navigator) ||
-      !((navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData);
+    let active = true;
 
-    if (!canUseConnection) {
-      setShowHeroVideo(false);
-      return;
+    async function fetchTunnelImages() {
+      const { data, error } = await supabase
+        .from('projects')
+        .select('image_url')
+        .not('image_url', 'is', null)
+        .order('featured', { ascending: false })
+        .order('created_at', { ascending: false })
+        .limit(20);
+
+      if (!active) return;
+
+      if (error) {
+        console.error('Failed to load hero tunnel images:', error);
+        return;
+      }
+
+      const images = (data ?? [])
+        .map((project) => project.image_url)
+        .filter((url): url is string => Boolean(url));
+
+      setTunnelImages([...new Set(images)]);
     }
 
-    const scheduleVideo = () => setShowHeroVideo(true);
+    void fetchTunnelImages();
 
-    if ('requestIdleCallback' in window) {
-      const idleId = window.requestIdleCallback(scheduleVideo, { timeout: 1600 });
-      return () => window.cancelIdleCallback(idleId);
-    }
-
-    const timer = globalThis.setTimeout(scheduleVideo, 900);
-    return () => globalThis.clearTimeout(timer);
+    return () => {
+      active = false;
+    };
   }, [isDesktop, reducedMotion]);
 
   const heroTextInitial = reducedMotion ? false : { opacity: 0, y: 24 };
@@ -62,31 +69,58 @@ export default function Home() {
     ? { duration: 0 }
     : { duration: 0.65, ease: [0.25, 0.46, 0.45, 0.94] as const };
 
+  const showTunnel =
+    isDesktop &&
+    !reducedMotion;
+
   return (
     <>
       <SEOHead />
-      
+
       <div className="min-h-screen">
         {/* Hero Section */}
-        <section ref={heroRef} className="relative min-h-[100svh] w-full overflow-hidden">
+        <section
+          ref={heroRef}
+          className="relative min-h-[100svh] w-full overflow-hidden bg-black"
+        >
           <div className="absolute inset-0 bg-black" />
 
-          <div className="relative min-h-[100svh] flex flex-col items-center justify-end pb-40 px-6">
+          {showTunnel && (
+            <div className="absolute inset-0 z-0">
+              <HeroTunnel images={tunnelImages} />
+            </div>
+          )}
+
+          <div
+            className="pointer-events-none absolute inset-0 z-10 bg-black/35"
+            aria-hidden="true"
+          />
+
+          <div
+            className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-2/3 bg-gradient-to-t from-black via-black/45 to-transparent"
+            aria-hidden="true"
+          />
+
+          <div className="relative z-20 min-h-[100svh] flex flex-col items-center justify-end pb-40 px-6">
             <motion.div
               className="text-center space-y-6 max-w-4xl"
               initial={heroTextInitial}
               animate={heroTextAnimate}
               transition={heroTextTransition}
             >
-
-              
-
-
               <motion.div
                 className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4"
-                initial={{ opacity: 0, y: 20 }}
+                initial={reducedMotion ? false : { opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: 0.9, ease: [0.25, 0.46, 0.45, 0.94] as const }}
+                transition={
+                  reducedMotion
+                    ? { duration: 0 }
+                    : {
+                        duration: 1,
+                        delay: 0.9,
+                        ease: [0.25, 0.46, 0.45, 0.94] as const,
+                      }
+                }
               >
                 <Link
                   to="/portfolio"
@@ -109,7 +143,11 @@ export default function Home() {
               className="absolute bottom-8 sm:bottom-12"
               initial={reducedMotion ? false : { opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={reducedMotion ? { duration: 0 } : { delay: 0.35, duration: 0.45 }}
+              transition={
+                reducedMotion
+                  ? { duration: 0 }
+                  : { delay: 0.35, duration: 0.45 }
+              }
             >
               <ScrollIndicator />
             </motion.div>
@@ -127,9 +165,7 @@ export default function Home() {
 
             <ScrollReveal direction="up" delay={0.15}>
               <div className="space-y-4 text-lg font-light leading-relaxed text-muted-foreground">
-                <p>
-                  {photographerInfo.biography.split('\n\n')[0]}
-                </p>
+                <p>{photographerInfo.biography.split('\n\n')[0]}</p>
               </div>
             </ScrollReveal>
 
