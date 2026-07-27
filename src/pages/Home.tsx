@@ -11,12 +11,10 @@ import Marquee from '@/components/Marquee';
 import HeroTunnel from '@/components/HeroTunnel';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
-import { useDesktop } from '@/hooks/useDesktop';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 export default function Home() {
   const heroRef = useRef<HTMLElement | null>(null);
-  const isDesktop = useDesktop(1024);
   const reducedMotion = useReducedMotion();
   const [tunnelImages, setTunnelImages] = useState<string[]>([]);
 
@@ -26,7 +24,7 @@ export default function Home() {
   });
 
   useEffect(() => {
-    if (!isDesktop || reducedMotion) {
+    if (reducedMotion) {
       setTunnelImages([]);
       return;
     }
@@ -61,7 +59,7 @@ export default function Home() {
     return () => {
       active = false;
     };
-  }, [isDesktop, reducedMotion]);
+  }, [reducedMotion]);
 
   const heroTextInitial = reducedMotion ? false : { opacity: 0, y: 24 };
   const heroTextAnimate = { opacity: 1, y: 0 };
@@ -69,9 +67,7 @@ export default function Home() {
     ? { duration: 0 }
     : { duration: 0.65, ease: [0.25, 0.46, 0.45, 0.94] as const };
 
-  const showTunnel =
-    isDesktop &&
-    !reducedMotion;
+  const showTunnel = !reducedMotion;
 
   return (
     <>
