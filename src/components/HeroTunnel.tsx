@@ -10,7 +10,7 @@ const NUM_SEGMENTS  = 15;
 const LINE_RADIUS   = 0.003;
 const SCROLL_TO_Z   = 0.05;
 const CAMERA_CHASE  = 0.1;
-const FADE_IN       = 1;
+const FADE_IN       = 0.2;
 const FOG_FAR       = NUM_SEGMENTS * SEGMENT_DEPTH * 0.95;
 const SPEED         = 32;
 

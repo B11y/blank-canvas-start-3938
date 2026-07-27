@@ -13,6 +13,38 @@ import { Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 
+const optimizeTunnelImageUrl = (url: string) => {
+  if (!url.includes('res.cloudinary.com') || !url.includes('/image/upload/')) {
+    return url;
+  }
+
+  const marker = '/image/upload/';
+  const [base, rawRest] = url.split(marker);
+
+  if (!rawRest) return url;
+
+  const parts = rawRest.split('/');
+
+  // Remove an existing Cloudinary transformation segment when present.
+  if (
+    parts[0] &&
+    !/^v\d+$/.test(parts[0]) &&
+    /(^|,)(f_|q_|w_|h_|c_|dpr_|ar_|g_)/.test(parts[0])
+  ) {
+    parts.shift();
+  }
+
+  const targetWidth =
+    typeof window !== 'undefined' && window.innerWidth < 768
+      ? 520
+      : 900;
+
+  const transformation =
+    `f_auto,q_auto:eco,c_fill,w_${targetWidth},dpr_auto`;
+
+  return `${base}${marker}${transformation}/${parts.join('/')}`;
+};
+
 export default function Home() {
   const heroRef = useRef<HTMLElement | null>(null);
   const reducedMotion = useReducedMotion();
@@ -38,7 +70,7 @@ export default function Home() {
         .not('image_url', 'is', null)
         .order('featured', { ascending: false })
         .order('created_at', { ascending: false })
-        .limit(20);
+        .limit(10);
 
       if (!active) return;
 
@@ -49,7 +81,8 @@ export default function Home() {
 
       const images = (data ?? [])
         .map((project) => project.image_url)
-        .filter((url): url is string => Boolean(url));
+        .filter((url): url is string => Boolean(url))
+        .map(optimizeTunnelImageUrl);
 
       setTunnelImages([...new Set(images)]);
     }
